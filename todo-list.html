@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+
+.navbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+.container {
+    max-width:500px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:10px;
+    margin-top:12px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+button:hover {
+    background:#5a6edc;
+}
+
+/* FORM */
+form {
+    display:flex;
+    gap:10px;
+}
+
+form input {
+    flex:1;
+}
+
+/* TASK LIST */
+ul {
+    list-style:none;
+    padding:0;
+    margin-top:20px;
+}
+
+li {
+    background:#f5f5f5;
+    margin:8px 0;
+    padding:12px;
+    border-radius:6px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+li.completed {
+    text-decoration:line-through;
+    color:gray;
+}
+
+.task-actions button {
+    width:32px;
+    height:32px;
+    padding:0;
+    margin-left:5px;
+    border-radius:50%;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>📝 To-Do List</h2>
+
+<form onsubmit="addTask(); return false;">
+    <input type="text" id="taskInput" placeholder="Add a task">
+    <button type="submit">Add</button>
+</form>
+
+<ul id="taskList"></ul>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+function renderTasks() {
+    const list = document.getElementById('taskList');
+    list.innerHTML = '';
+
+    tasks.forEach((task, index) => {
+        const li = document.createElement('li');
+        li.className = task.completed ? 'completed' : '';
+
+        li.innerHTML = `
+            ${task.name}
+            <span class="task-actions">
+                <button onclick="toggleComplete(${index})">✔️</button>
+                <button onclick="deleteTask(${index})">🗑️</button>
+            </span>
+        `;
+        list.appendChild(li);
+    });
+}
+
+function addTask() {
+    const input = document.getElementById('taskInput');
+    if (!input.value.trim()) return alert("Enter a task!");
+
+    tasks.push({ name: input.value.trim(), completed: false });
+    input.value = '';
+    saveAndRender();
+}
+
+function toggleComplete(index) {
+    tasks[index].completed = !tasks[index].completed;
+    saveAndRender();
+}
+
+function deleteTask(index) {
+    tasks.splice(index, 1);
+    saveAndRender();
+}
+
+function saveAndRender() {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    renderTasks();
+}
+
+renderTasks();
+</script>
+
+</body>
+</html>

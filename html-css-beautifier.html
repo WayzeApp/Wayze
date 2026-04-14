@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HTML/CSS Beautifier - Wayze</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    background: #111;
+    padding: 15px 20px;
+    color:white;
+    font-weight:600;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:700px;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TITLE WITH EMOJI */
+h2 {
+    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    margin-bottom:20px;
+}
+
+/* TEXTAREA */
+textarea {
+    width:100%;
+    min-height:150px;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-family: monospace;
+    box-sizing:border-box;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:20px;
+    border:1px solid #ccc;
+    padding:15px;
+    border-radius:8px;
+    background:#f9f9f9;
+    font-family: monospace;
+    word-break: break-word;
+    white-space: pre-wrap;
+    text-align:left;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>🖋 HTML / CSS Beautifier</h2>
+
+<textarea id="codeInput" placeholder="Paste your HTML/CSS code here..."></textarea>
+
+<button onclick="beautifyCode()">Beautify Code</button>
+<button onclick="copyResult()">Copy Beautified Code</button>
+<button onclick="clearCode()">Clear</button>
+
+<div class="result" id="result"></div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<!-- JS -->
+<script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.7/js/lib/beautify-html.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-beautify@1.14.7/js/lib/beautify-css.min.js"></script>
+
+<script>
+function beautifyCode() {
+    const code = document.getElementById('codeInput').value.trim();
+    if (!code) { alert("Please enter code!"); return; }
+
+    let output;
+    if (code.includes("{") && !code.includes("<")) {
+        output = css_beautify(code, { indent_size: 4 });
+    } else {
+        output = html_beautify(code, { indent_size: 4 });
+    }
+
+    document.getElementById('result').innerText = output;
+}
+
+function copyResult() {
+    const res = document.getElementById('result').innerText;
+    if (!res) { alert("Nothing to copy!"); return; }
+    navigator.clipboard.writeText(res).then(() => alert("Beautified code copied!"));
+}
+
+function clearCode() {
+    document.getElementById('codeInput').value = "";
+    document.getElementById('result').innerText = "";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JSON Formatter - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width: 700px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TEXTAREA & BUTTON */
+textarea, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+textarea {
+    border: 1px solid #ccc;
+    font-family: monospace;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top: 15px;
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px;
+    background: #f5f5f5;
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin: 20px 15px; padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+<h2>🧾 JSON Formatter</h2>
+
+<textarea id="jsonInput" rows="10" placeholder='{"name":"John","age":30}'></textarea>
+
+<button onclick="formatJSON()">Format JSON</button>
+<button onclick="copyJSON()">Copy Output</button>
+
+<div class="result" id="result"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function formatJSON() {
+    const input = document.getElementById('jsonInput').value;
+    const result = document.getElementById('result');
+
+    try {
+        const obj = JSON.parse(input);
+        result.innerText = JSON.stringify(obj, null, 4);
+    } catch(e) {
+        result.innerText = "Invalid JSON!";
+    }
+}
+
+function copyJSON() {
+    const text = document.getElementById("result").innerText;
+
+    if (!text.trim()) {
+        alert("Nothing to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Copied!"))
+        .catch(() => alert("Failed to copy."));
+}
+</script>
+
+</body>
+</html>

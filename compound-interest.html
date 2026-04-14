@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compound Interest Calculator - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:520px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:20px;
+    text-align:left;
+    line-height:1.6;
+    font-weight:600;
+}
+
+.highlight {
+    color:#667eea;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>💰 Compound Interest Calculator</h2>
+
+<input type="number" id="principal" placeholder="Principal Amount (₹)">
+<input type="number" id="rate" placeholder="Annual Interest Rate (%)">
+<input type="number" id="time" placeholder="Time (Years)">
+
+<select id="freq">
+<option value="1">Annually</option>
+<option value="2">Semi-Annually</option>
+<option value="4">Quarterly</option>
+<option value="12">Monthly</option>
+<option value="365">Daily</option>
+</select>
+
+<button onclick="calculateCI()">Calculate</button>
+
+<div class="result" id="result"></div>
+
+</div>
+</div>
+
+<script>
+
+function calculateCI() {
+
+    let P = parseFloat(document.getElementById('principal').value);
+    let R = parseFloat(document.getElementById('rate').value) / 100;
+    let T = parseFloat(document.getElementById('time').value);
+    let n = parseInt(document.getElementById('freq').value);
+
+    if(!P || !R || !T || !n){
+        document.getElementById('result').innerHTML = "⚠️ Please enter all values correctly";
+        return;
+    }
+
+    let A = P * Math.pow((1 + R/n), n*T);
+    let interest = A - P;
+
+    document.getElementById('result').innerHTML = `
+        📊 <span class="highlight">Results:</span><br><br>
+
+        Principal: ₹ ${P.toFixed(2)}<br>
+        Interest Earned: ₹ ${interest.toFixed(2)}<br>
+        <b>Maturity Amount: ₹ ${A.toFixed(2)}</b>
+    `;
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

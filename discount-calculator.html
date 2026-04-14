@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discount Calculator - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:520px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    font-weight:600;
+}
+
+.highlight {
+    color:#667eea;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>💸 Discount Calculator</h2>
+
+<input type="number" id="price" placeholder="Original Price (₹)">
+<input type="number" id="discount" placeholder="Discount (%)">
+
+<button onclick="calculateDiscount()">Calculate</button>
+
+<div class="result" id="result"></div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+function calculateDiscount() {
+
+    let price = parseFloat(document.getElementById("price").value);
+    let discount = parseFloat(document.getElementById("discount").value);
+
+    if(!price || !discount){
+        document.getElementById("result").innerHTML = "⚠️ Enter valid values";
+        return;
+    }
+
+    let discountAmount = (price * discount) / 100;
+    let finalPrice = price - discountAmount;
+
+    document.getElementById("result").innerHTML = `
+        📊 <span class="highlight">Results:</span><br><br>
+
+        Discount: ₹ ${discountAmount.toFixed(2)}<br>
+        Final Price: ₹ ${finalPrice.toFixed(2)}<br>
+        You Save: ₹ ${discountAmount.toFixed(2)}
+    `;
+}
+
+</script>
+
+</body>
+</html>

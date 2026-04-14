@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profit Margin Calculator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:600px;
+    width:90%;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+/* RESULT COLORS */
+.profit { color:green; font-weight:bold; }
+.loss { color:red; font-weight:bold; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>💰 Profit Margin Calculator</h2>
+
+<input type="number" id="cost" placeholder="Cost Price (₹)">
+<input type="number" id="selling" placeholder="Selling Price (₹)">
+
+<button onclick="calculateProfit()">⚡ Calculate</button>
+
+<div class="print-area">
+<table>
+<thead>
+<tr>
+<th>Details</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+</div>
+
+<button onclick="window.print()">🖨️ Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculateProfit(){
+
+    let cost = parseFloat(document.getElementById("cost").value);
+    let selling = parseFloat(document.getElementById("selling").value);
+
+    if(isNaN(cost) || isNaN(selling)){
+        alert("Please enter all values");
+        return;
+    }
+
+    if(cost === 0){
+        alert("Cost price cannot be 0");
+        return;
+    }
+
+    let profit = selling - cost;
+    let margin = (profit / selling) * 100;
+    let markup = (profit / cost) * 100;
+
+    let profitClass = profit >= 0 ? "profit" : "loss";
+    let label = profit >= 0 ? "Profit" : "Loss";
+
+    document.getElementById("resultTable").innerHTML = `
+        <tr><td>Cost Price</td><td>₹ ${cost.toFixed(2)}</td></tr>
+        <tr><td>Selling Price</td><td>₹ ${selling.toFixed(2)}</td></tr>
+        <tr><td>${label}</td><td class="${profitClass}">₹ ${Math.abs(profit).toFixed(2)}</td></tr>
+        <tr><td>Profit Margin (%)</td><td>${margin.toFixed(2)}%</td></tr>
+        <tr><td>Markup (%)</td><td>${markup.toFixed(2)}%</td></tr>
+    `;
+}
+</script>
+
+</body>
+</html>

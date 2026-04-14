@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product Tax Calculator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:600px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:15px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+th {
+    background:#667eea;
+    color:white;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    margin-top:auto;
+}
+
+/* PRINT */
+.print-area { margin-top:15px; }
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+    .print-area, .print-area * { visibility:visible; }
+    .print-area { position:absolute; top:0; left:0; width:100%; }
+    .print-title { display:block; text-align:center; font-size:22px; margin-bottom:10px; }
+    input, button, .navbar, .footer { display:none !important; }
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin:20px 12px;
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🧾 GST Calculator</h2>
+<p style="color:#666; font-size:14px;">
+Calculate GST amount, split tax, and total price instantly.
+</p>
+
+<label>Product Price (₹)</label>
+<input type="number" id="price" placeholder="Enter product price">
+
+<label>GST Rate (%)</label>
+<select id="gst">
+<option value="5">5%</option>
+<option value="12">12%</option>
+<option value="18">18%</option>
+<option value="28">28%</option>
+</select>
+
+<label>Tax Type</label>
+<select id="type">
+<option value="exclusive">Exclusive (Add GST)</option>
+<option value="inclusive">Inclusive (Extract GST)</option>
+</select>
+
+<div class="print-area">
+<h2 class="print-title">GST Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Details</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+</div>
+
+<button onclick="calculateTax()">⚡ Calculate</button>
+<button onclick="window.print()">🖨️ Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculateTax(){
+    let price = parseFloat(document.getElementById("price").value);
+    let gst = parseFloat(document.getElementById("gst").value);
+    let type = document.getElementById("type").value;
+
+    if(isNaN(price) || price <= 0){
+        alert("Enter valid product price");
+        return;
+    }
+
+    let gstAmount = 0;
+    let total = 0;
+    let basePrice = price;
+
+    if(type === "exclusive"){
+        gstAmount = (price * gst) / 100;
+        total = price + gstAmount;
+    } else {
+        gstAmount = price - (price / (1 + gst/100));
+        basePrice = price - gstAmount;
+        total = price;
+    }
+
+    let cgst = gstAmount / 2;
+    let sgst = gstAmount / 2;
+
+    document.getElementById("resultTable").innerHTML = `
+        <tr><td>Base Price</td><td>₹ ${basePrice.toFixed(2)}</td></tr>
+        <tr><td>GST Rate</td><td>${gst}%</td></tr>
+        <tr><td>CGST</td><td>₹ ${cgst.toFixed(2)}</td></tr>
+        <tr><td>SGST</td><td>₹ ${sgst.toFixed(2)}</td></tr>
+        <tr><td>Total GST</td><td>₹ ${gstAmount.toFixed(2)}</td></tr>
+        <tr><td><b>Total Price</b></td><td><b>₹ ${total.toFixed(2)}</b></td></tr>
+    `;
+}
+</script>
+
+</body>
+</html>

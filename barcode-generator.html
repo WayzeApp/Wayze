@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Barcode Generator - Wayze</title>
+
+<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+
+<style>
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a {
+    color:white;
+    text-decoration:none;
+}
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:600px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:none;
+    background:#667eea;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* SECOND BUTTON */
+.copy-btn {
+    background:#28a745;
+}
+.copy-btn:hover {
+    background:#218838;
+}
+
+/* BARCODE AREA */
+.print-area {
+    margin-top:20px;
+    padding:15px;
+    border-radius:10px;
+    background:#f5f7fb;
+    overflow-x:auto;
+}
+
+.print-area svg {
+    max-width:100%;
+}
+
+/* STATUS */
+.status {
+    margin-top:10px;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* PRINT */
+@media print {
+    body * { visibility:hidden; }
+
+    .print-area, .print-area * {
+        visibility:visible;
+    }
+
+    .print-area {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        text-align:center;
+    }
+
+    input, button, .navbar, .footer {
+        display:none !important;
+    }
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container {
+        margin:0 10px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+    <div class="container">
+
+        <h2>🏷️ Barcode Generator</h2>
+
+        <input type="text" id="barcodeText" placeholder="Enter product code / SKU">
+
+        <div class="print-area">
+            <svg id="barcode"></svg>
+        </div>
+
+        <div class="status" id="status">Enter code and generate barcode</div>
+
+        <button onclick="generateBarcode()">Generate Barcode</button>
+        <button class="copy-btn" onclick="copyText()">Copy Code</button>
+        <button onclick="window.print()">Print / Save PDF</button>
+
+    </div>
+</div>
+
+<script>
+
+function generateBarcode(){
+    let text = document.getElementById("barcodeText").value.trim();
+
+    if(!text){
+        document.getElementById("status").innerText = "⚠️ Enter a value first";
+        return;
+    }
+
+    JsBarcode("#barcode", text, {
+        format: "CODE128",
+        displayValue: true,
+        fontSize: 16,
+        height: 80
+    });
+
+    document.getElementById("status").innerText = "✅ Barcode generated!";
+}
+
+function copyText(){
+    let text = document.getElementById("barcodeText").value;
+
+    if(!text){
+        document.getElementById("status").innerText = "⚠️ Enter value first";
+        return;
+    }
+
+    navigator.clipboard.writeText(text);
+    document.getElementById("status").innerText = "📋 Copied to clipboard!";
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

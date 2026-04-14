@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ideal Weight Calculator - Wayze</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position: sticky;
+    top:0;
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    background: #111;
+    padding: 15px 20px;
+    color:white;
+    font-weight:600;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TITLE */
+h2 {
+    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    margin-bottom:20px;
+}
+
+/* INPUT & SELECT */
+input, select {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:16px;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:20px;
+    font-weight:600;
+    font-size:18px;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>🧮 Ideal Weight Calculator</h2>
+
+<input type="number" id="height" placeholder="Enter Height (cm)">
+<select id="gender">
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+</select>
+
+<button onclick="calculateWeight()">Calculate</button>
+<button onclick="clearFields()">Clear</button>
+
+<div class="result" id="result"></div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<!-- JS -->
+<script>
+function calculateWeight() {
+    let height = parseFloat(document.getElementById("height").value);
+    let gender = document.getElementById("gender").value;
+
+    if (!height || height <= 0) {
+        document.getElementById("result").innerText = "Enter a valid height!";
+        return;
+    }
+
+    let weight;
+    if (gender === "male") {
+        weight = 50 + 0.9 * (height - 152);
+    } else {
+        weight = 45.5 + 0.9 * (height - 152);
+    }
+
+    document.getElementById("result").innerText =
+        `Ideal Weight: ${weight.toFixed(2)} kg`;
+}
+
+function clearFields() {
+    document.getElementById("height").value = "";
+    document.getElementById("gender").value = "male";
+    document.getElementById("result").innerText = "";
+    document.getElementById("height").focus();
+}
+</script>
+
+</body>
+</html>

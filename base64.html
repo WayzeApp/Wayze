@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Base64 Encoder & Decoder - Wayze</title>
+
+<style>
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a {
+    color:white;
+    text-decoration:none;
+}
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT + TEXTAREA */
+input, textarea {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+    font-family:monospace;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:none;
+    background:#667eea;
+    color:white;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* IMAGE */
+img {
+    margin-top:15px;
+    max-width:100%;
+    border-radius:8px;
+    background:#f5f7fb;
+}
+
+/* STATUS */
+.status {
+    margin-top:10px;
+    font-size:14px;
+    font-weight:600;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container {
+        margin:0 10px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+    <div class="container">
+
+        <h2>Base64 Encoder & Decoder</h2>
+
+        <!-- ENCODE -->
+        <input type="file" id="fileInput">
+        <textarea id="encodedOutput" rows="5" placeholder="Base64 output will appear here..."></textarea>
+        <button onclick="encodeFile()">Encode to Base64</button>
+
+        <!-- DECODE -->
+        <textarea id="decodedInput" rows="5" placeholder="Paste Base64 string here..."></textarea>
+        <button onclick="decodeBase64()">Show Image</button>
+
+        <div class="status" id="status">Upload or paste data to start</div>
+
+        <img id="decodedImage" alt="Decoded Image">
+
+    </div>
+</div>
+
+<script>
+
+// ENCODE
+function encodeFile(){
+    const file = document.getElementById('fileInput').files[0];
+    if (!file) {
+        document.getElementById("status").innerText = "⚠️ Select a file first";
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function() {
+        document.getElementById('encodedOutput').value = reader.result;
+        document.getElementById("status").innerText = "✅ Encoded successfully!";
+    };
+    reader.readAsDataURL(file);
+}
+
+// DECODE
+function decodeBase64() {
+    const base64 = document.getElementById('decodedInput').value.trim();
+
+    if (!base64) {
+        document.getElementById("status").innerText = "⚠️ Paste Base64 string";
+        return;
+    }
+
+    document.getElementById('decodedImage').src = base64;
+    document.getElementById("status").innerText = "🎉 Image generated!";
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

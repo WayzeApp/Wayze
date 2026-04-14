@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Template Generator - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:600px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+select, textarea {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    font-size:15px;
+}
+
+textarea {
+    min-height:200px;
+    resize:vertical;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>✉️ Email Template Generator</h2>
+
+<select id="emailType">
+    <option value="">-- Select Email Type --</option>
+    <option value="formal">Formal</option>
+    <option value="followup">Follow-Up</option>
+    <option value="thankyou">Thank You</option>
+    <option value="complaint">Complaint</option>
+</select>
+
+<textarea id="generatedEmail" placeholder="Your email will appear here..." readonly></textarea>
+
+<button onclick="generateEmail()">Generate Email</button>
+<button onclick="copyEmail()">Copy Email</button>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+const emailTemplates = {
+
+formal: `Subject: Proposal / Request for [Purpose]
+
+Dear [Recipient Name],
+
+I hope this message finds you well. I am writing to formally [state purpose].
+
+[Add details here.]
+
+Please let me know if you need more information.
+
+Sincerely,
+[Your Name]`,
+
+followup: `Subject: Follow-Up on [Topic]
+
+Hi [Recipient Name],
+
+Just following up regarding [topic].
+
+Looking forward to your response.
+
+Best regards,
+[Your Name]`,
+
+thankyou: `Subject: Thank You
+
+Dear [Recipient Name],
+
+Thank you for your support.
+
+I truly appreciate it.
+
+Warm regards,
+[Your Name]`,
+
+complaint: `Subject: Complaint Regarding [Issue]
+
+Dear [Recipient Name],
+
+I would like to raise a concern about [issue].
+
+Please resolve this at the earliest.
+
+Sincerely,
+[Your Name]`
+};
+
+function generateEmail(){
+    let type = document.getElementById("emailType").value;
+    if(!type){
+        alert("Select email type");
+        return;
+    }
+    document.getElementById("generatedEmail").value = emailTemplates[type];
+}
+
+function copyEmail(){
+    let text = document.getElementById("generatedEmail");
+    if(!text.value){
+        alert("Generate email first");
+        return;
+    }
+    navigator.clipboard.writeText(text.value);
+    alert("Copied!");
+}
+
+</script>
+
+</body>
+</html>

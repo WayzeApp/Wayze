@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SKU Generator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+
+.navbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* TABLE */
+table {
+    width:100%;
+    margin-top:15px;
+    border-collapse:collapse;
+}
+
+th, td {
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+button:hover {
+    background:#5a6edc;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* PRINT */
+.print-area { margin-top:15px; }
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+    .print-area, .print-area * { visibility:visible; }
+    .print-area { position:absolute; top:0; left:0; width:100%; padding:10px; }
+    .print-title { display:block; text-align:center; font-size:22px; font-weight:bold; margin-bottom:15px; }
+    input, button, .no-print, .navbar, .footer { display:none !important; }
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🔢 SKU Generator</h2>
+
+<input type="text" id="product" placeholder="Product Name (e.g., Nike Shoes)">
+<input type="text" id="category" placeholder="Category (e.g., Shoes)">
+<input type="text" id="brand" placeholder="Brand (Optional)">
+
+<div class="print-area">
+<h2 class="print-title">SKU Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Details</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+</div>
+
+<button class="no-print" onclick="generateSKU()">Generate SKU</button>
+<button class="no-print" onclick="copySKU()">Copy SKU</button>
+<button class="no-print" onclick="window.print()">Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function randomCode(length){
+    let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    let result = "";
+    for(let i=0;i<length;i++){
+        result += chars.charAt(Math.floor(Math.random()*chars.length));
+    }
+    return result;
+}
+
+function short(text){
+    return text.replace(/\s+/g,'').substring(0,4).toUpperCase();
+}
+
+function generateSKU(){
+    let product = document.getElementById("product").value;
+    let category = document.getElementById("category").value;
+    let brand = document.getElementById("brand").value;
+
+    if(!product || !category){
+        alert("Enter required fields");
+        return;
+    }
+
+    let sku = short(category) + "-" + short(product);
+
+    if(brand){
+        sku += "-" + short(brand);
+    }
+
+    sku += "-" + randomCode(4);
+
+    document.getElementById("resultTable").innerHTML = `
+        <tr><td>Category</td><td>${category}</td></tr>
+        <tr><td>Product</td><td>${product}</td></tr>
+        <tr><td>Brand</td><td>${brand || '-'}</td></tr>
+        <tr><td><b>Generated SKU</b></td><td><b>${sku}</b></td></tr>
+    `;
+}
+
+function copySKU(){
+    let table = document.getElementById("resultTable");
+    if(!table.innerText){
+        alert("Generate SKU first");
+        return;
+    }
+
+    let sku = table.rows[3].cells[1].innerText;
+    navigator.clipboard.writeText(sku);
+    alert("Copied!");
+}
+</script>
+
+</body>
+</html>

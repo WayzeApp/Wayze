@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Content Idea Generator - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:600px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select, button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* IDEAS */
+.idea-list {
+    margin-top:20px;
+    text-align:left;
+}
+
+.idea-item {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px;
+    border-bottom:1px solid #eee;
+    background:#f9f9f9;
+    border-radius:6px;
+    margin-bottom:6px;
+}
+
+.idea-item button {
+    width:auto;
+    padding:5px 10px;
+}
+
+/* FOOTER (same as your CI page) */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>💡 Content Idea Generator</h2>
+
+<input type="text" id="keyword" placeholder="Enter keyword (e.g., fitness, business)">
+
+<select id="category">
+<option value="">-- Select Category --</option>
+<option value="tech">Tech</option>
+<option value="food">Food</option>
+<option value="business">Business</option>
+<option value="health">Health</option>
+<option value="education">Education</option>
+</select>
+
+<button onclick="generateIdeas()">Generate Ideas</button>
+<button onclick="copyAll()">Copy All</button>
+
+<div class="idea-list" id="ideaList"></div>
+
+</div>
+</div>
+
+<script>
+
+const starters = [
+"How to", "Top 10", "Best ways to", "Beginner guide to",
+"Secrets of", "Step-by-step guide to", "Why you should",
+"Mistakes to avoid in", "Ultimate guide to"
+];
+
+const endings = [
+"in 2026", "for beginners", "that actually work",
+"you must know", "like a pro", "for fast results"
+];
+
+function generateIdeas() {
+    const keyword = document.getElementById("keyword").value.trim();
+    const ideas = new Set();
+
+    for (let i = 0; i < 20; i++) {
+        let start = starters[Math.floor(Math.random() * starters.length)];
+        let end = endings[Math.floor(Math.random() * endings.length)];
+
+        let idea = keyword 
+            ? `${start} ${keyword} ${end}`
+            : `${start} something interesting ${end}`;
+
+        ideas.add(idea);
+    }
+
+    displayIdeas(Array.from(ideas).slice(0, 10));
+}
+
+function displayIdeas(ideas) {
+    const list = document.getElementById("ideaList");
+    list.innerHTML = "";
+
+    ideas.forEach(idea => {
+        let div = document.createElement("div");
+        div.className = "idea-item";
+        div.innerHTML = `
+            <span>${idea}</span>
+            <button onclick="copyIdea('${idea}')">📋</button>
+        `;
+        list.appendChild(div);
+    });
+}
+
+function copyIdea(text) {
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+
+function copyAll() {
+    let allIdeas = document.querySelectorAll(".idea-item span");
+
+    if (allIdeas.length === 0) {
+        alert("Generate ideas first!");
+        return;
+    }
+
+    let text = "";
+    allIdeas.forEach(i => text += i.innerText + "\n");
+
+    navigator.clipboard.writeText(text);
+    alert("All ideas copied!");
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

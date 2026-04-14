@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Profit Dashboard - Wayze</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+
+.logo {
+    font-weight:700;
+    font-size:18px;
+}
+
+/* ✅ WAYZE BUTTON SYSTEM (FOR <a> + <button>) */
+.wayze-btn,
+.wayze-btn:link,
+.wayze-btn:visited,
+.wayze-btn:hover,
+.wayze-btn:active {
+    background:#667eea;
+    color:white !important;
+    padding:8px 14px;
+    border-radius:6px;
+    text-decoration:none;
+    font-weight:600;
+    display:inline-block;
+    border:none;
+    cursor:pointer;
+}
+
+.wayze-btn:hover {
+    background:#5a6edc;
+}
+
+/* CONTAINER */
+.container {
+    max-width:900px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+button:hover {
+    background:#5a6edc;
+}
+
+/* SUMMARY */
+.cards {
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.card {
+    flex:1;
+    background:#f1f3f5;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.profit { color:green; }
+.loss { color:red; }
+
+/* CHART */
+.chart-container {
+    width:100%;
+    max-width:600px;
+    height:280px;
+    margin:15px auto;
+}
+
+/* TABLE */
+table {
+    width:100%;
+    margin-top:15px;
+    border-collapse:collapse;
+}
+
+th, td {
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* PRINT */
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+
+    .print-area, .print-area * {
+        visibility:visible;
+    }
+
+    .print-area {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+        padding:10px;
+    }
+
+    .print-title {
+        display:block;
+        text-align:center;
+        font-size:22px;
+        font-weight:bold;
+        margin-bottom:10px;
+    }
+
+    input, button, .no-print, .navbar, .footer {
+        display:none !important;
+    }
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- ✅ FIXED NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<div class="container">
+
+<h2>📊 Sales Profit Dashboard</h2>
+
+<div class="no-print">
+<input type="text" id="name" placeholder="Product Name">
+<input type="number" id="cost" placeholder="Cost Price (₹)">
+<input type="number" id="sell" placeholder="Selling Price (₹)">
+<input type="number" id="qty" placeholder="Quantity Sold">
+
+<button onclick="addProduct()">➕ Add Product</button>
+<button onclick="clearData()">🗑 Clear All Data</button>
+</div>
+
+<div class="cards">
+    <div class="card">Revenue<br><span id="rev">₹ 0</span></div>
+    <div class="card">Cost<br><span id="costVal">₹ 0</span></div>
+    <div class="card">Profit<br><span id="profitVal">₹ 0</span></div>
+</div>
+
+<div class="print-area">
+<h2 class="print-title">Sales Report</h2>
+
+<div class="chart-container">
+<canvas id="profitChart"></canvas>
+</div>
+
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Cost</th>
+<th>Sell</th>
+<th>Qty</th>
+<th>Profit</th>
+</tr>
+</thead>
+<tbody id="tableBody"></tbody>
+</table>
+</div>
+
+<button class="no-print wayze-btn" onclick="window.print()">Print / Save PDF</button>
+
+</div>
+
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+let chart;
+
+function getData(){
+    return JSON.parse(localStorage.getItem("salesData")) || [];
+}
+
+function saveData(data){
+    localStorage.setItem("salesData", JSON.stringify(data));
+}
+
+function addProduct(){
+    let name = document.getElementById("name").value.trim();
+    let cost = parseFloat(document.getElementById("cost").value);
+    let sell = parseFloat(document.getElementById("sell").value);
+    let qty = parseFloat(document.getElementById("qty").value);
+
+    if(!name || isNaN(cost) || isNaN(sell) || isNaN(qty)){
+        alert("Enter all fields");
+        return;
+    }
+
+    let data = getData();
+    data.push({name, cost, sell, qty});
+    saveData(data);
+
+    renderTable();
+    clearInputs();
+}
+
+function clearInputs(){
+    document.getElementById("name").value="";
+    document.getElementById("cost").value="";
+    document.getElementById("sell").value="";
+    document.getElementById("qty").value="";
+}
+
+function clearData(){
+    localStorage.removeItem("salesData");
+    renderTable();
+}
+
+function renderTable(){
+    let data = getData();
+
+    let totalRevenue=0, totalCost=0;
+    let labels=[], profits=[], html="";
+
+    data.forEach(item=>{
+        let revenue=item.sell*item.qty;
+        let cost=item.cost*item.qty;
+        let profit=revenue-cost;
+
+        totalRevenue+=revenue;
+        totalCost+=cost;
+
+        labels.push(item.name);
+        profits.push(profit);
+
+        html+=`<tr>
+        <td>${item.name}</td>
+        <td>₹ ${item.cost}</td>
+        <td>₹ ${item.sell}</td>
+        <td>${item.qty}</td>
+        <td class="${profit>=0?'profit':'loss'}">₹ ${profit.toFixed(2)}</td>
+        </tr>`;
+    });
+
+    document.getElementById("tableBody").innerHTML=html;
+
+    let totalProfit=totalRevenue-totalCost;
+    document.getElementById("rev").innerText="₹ "+totalRevenue.toFixed(2);
+    document.getElementById("costVal").innerText="₹ "+totalCost.toFixed(2);
+    document.getElementById("profitVal").innerText="₹ "+totalProfit.toFixed(2);
+
+    renderChart(labels,profits);
+}
+
+function renderChart(labels,profits){
+    if(chart) chart.destroy();
+
+    chart=new Chart(document.getElementById("profitChart"),{
+        type:"bar",
+        data:{
+            labels:labels,
+            datasets:[{label:"Profit (₹)",data:profits}]
+        },
+        options:{
+            responsive:true,
+            maintainAspectRatio:false
+        }
+    });
+}
+
+window.onbeforeprint=function(){
+    setTimeout(renderTable,300);
+};
+
+renderTable();
+</script>
+
+</body>
+</html>

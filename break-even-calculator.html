@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Break-even Calculator - Wayze</title>
+
+<style>
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a {
+    color:white;
+    text-decoration:none;
+}
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* LABEL */
+label {
+    font-weight:600;
+    margin-top:12px;
+    display:block;
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:15px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    font-size:18px;
+    font-weight:600;
+    text-align:center;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container {
+        margin:0 10px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>Break-even Calculator</h2>
+
+<label>Fixed Costs (₹)</label>
+<input type="number" id="fixedCost" placeholder="Enter fixed costs">
+
+<label>Variable Cost per Unit (₹)</label>
+<input type="number" id="variableCost" placeholder="Enter variable cost per unit">
+
+<label>Selling Price per Unit (₹)</label>
+<input type="number" id="sellingPrice" placeholder="Enter selling price per unit">
+
+<button onclick="calculateBreakEven()">Calculate</button>
+
+<div class="result" id="breakEvenUnits"></div>
+<div class="result" id="breakEvenRevenue"></div>
+
+</div>
+</div>
+
+<script>
+
+function formatCurrency(num) {
+    return num.toLocaleString('en-IN', { maximumFractionDigits: 2 });
+}
+
+function calculateBreakEven() {
+
+    let FC = parseFloat(document.getElementById("fixedCost").value);
+    let VC = parseFloat(document.getElementById("variableCost").value);
+    let SP = parseFloat(document.getElementById("sellingPrice").value);
+
+    if (!FC || !VC || !SP) {
+        document.getElementById("breakEvenUnits").innerText = "⚠️ Please enter all values";
+        document.getElementById("breakEvenRevenue").innerText = "";
+        return;
+    }
+
+    if (SP <= VC) {
+        document.getElementById("breakEvenUnits").innerText = "⚠️ Selling price must be greater than variable cost";
+        document.getElementById("breakEvenRevenue").innerText = "";
+        return;
+    }
+
+    let units = FC / (SP - VC);
+    let revenue = units * SP;
+
+    document.getElementById("breakEvenUnits").innerText =
+        `Break-even Units: ${Math.ceil(units)}`;
+
+    document.getElementById("breakEvenRevenue").innerText =
+        `Break-even Revenue: ₹ ${formatCurrency(revenue)}`;
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

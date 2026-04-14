@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Calculator - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:700px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* SMALL BUTTON */
+.small-btn {
+    padding:6px 10px;
+    font-size:13px;
+    background:#e74c3c;
+}
+.small-btn:hover { background:#c0392b; }
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+    overflow-x:auto;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+th {
+    background:#f5f7fb;
+}
+
+/* HIGHLIGHT ROWS */
+tfoot td {
+    font-weight:bold;
+    background:#fafafa;
+}
+
+/* PRINT */
+.print-area { margin-top:15px; }
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+    .print-area, .print-area * { visibility:visible; }
+    .print-area {
+        position:absolute;
+        top:0;
+        left:0;
+        width:100%;
+    }
+    .print-title {
+        display:block;
+        text-align:center;
+        font-size:22px;
+        margin-bottom:10px;
+    }
+    input, button, .navbar, .footer, .no-print {
+        display:none !important;
+    }
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>Cash Flow Calculator</h2>
+
+<label>Opening Balance (₹)</label>
+<input type="number" id="openingBalance" placeholder="Enter opening balance">
+
+<h3>Cash Inflows</h3>
+<input type="text" id="inflowName" placeholder="Description">
+<input type="number" id="inflowAmount" placeholder="Amount (₹)">
+<button onclick="addInflow()">➕ Add Inflow</button>
+
+<h3>Cash Outflows</h3>
+<input type="text" id="outflowName" placeholder="Description">
+<input type="number" id="outflowAmount" placeholder="Amount (₹)">
+<button onclick="addOutflow()">➖ Add Outflow</button>
+
+<div class="print-area">
+<h2 class="print-title">Cash Flow Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+<th>Amount (₹)</th>
+<th class="no-print">Action</th>
+</tr>
+</thead>
+
+<tbody id="cashFlowList"></tbody>
+
+<tfoot>
+<tr><td colspan="2">Total Inflow</td><td id="totalInflow">₹ 0.00</td><td class="no-print"></td></tr>
+<tr><td colspan="2">Total Outflow</td><td id="totalOutflow">₹ 0.00</td><td class="no-print"></td></tr>
+<tr><td colspan="2">Net Cash Flow</td><td id="netCashFlow">₹ 0.00</td><td class="no-print"></td></tr>
+<tr><td colspan="2">Closing Balance</td><td id="closingBalance">₹ 0.00</td><td class="no-print"></td></tr>
+</tfoot>
+</table>
+
+</div>
+
+<button class="no-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+
+</div>
+</div>
+
+<script>
+
+let totalInflow = 0;
+let totalOutflow = 0;
+
+function addInflow(){
+    let name = document.getElementById("inflowName").value.trim();
+    let amount = parseFloat(document.getElementById("inflowAmount").value);
+
+    if(!name || !amount){ alert("Enter inflow details"); return; }
+
+    totalInflow += amount;
+
+    let row = document.createElement("tr");
+    row.innerHTML = `
+        <td>Inflow</td>
+        <td>${name}</td>
+        <td>₹ ${amount.toFixed(2)}</td>
+        <td class="no-print">
+            <button class="small-btn" onclick="removeEntry(this, ${amount}, 'inflow')">X</button>
+        </td>`;
+
+    document.getElementById("cashFlowList").appendChild(row);
+
+    updateResults();
+    document.getElementById("inflowName").value="";
+    document.getElementById("inflowAmount").value="";
+}
+
+function addOutflow(){
+    let name = document.getElementById("outflowName").value.trim();
+    let amount = parseFloat(document.getElementById("outflowAmount").value);
+
+    if(!name || !amount){ alert("Enter outflow details"); return; }
+
+    totalOutflow += amount;
+
+    let row = document.createElement("tr");
+    row.innerHTML = `
+        <td>Outflow</td>
+        <td>${name}</td>
+        <td>₹ ${amount.toFixed(2)}</td>
+        <td class="no-print">
+            <button class="small-btn" onclick="removeEntry(this, ${amount}, 'outflow')">X</button>
+        </td>`;
+
+    document.getElementById("cashFlowList").appendChild(row);
+
+    updateResults();
+    document.getElementById("outflowName").value="";
+    document.getElementById("outflowAmount").value="";
+}
+
+function removeEntry(btn, amount, type){
+    btn.closest("tr").remove();
+
+    if(type === "inflow") totalInflow -= amount;
+    else totalOutflow -= amount;
+
+    updateResults();
+}
+
+function updateResults(){
+    let opening = parseFloat(document.getElementById("openingBalance").value) || 0;
+
+    let net = totalInflow - totalOutflow;
+    let closing = opening + net;
+
+    document.getElementById("totalInflow").innerText = "₹ " + totalInflow.toFixed(2);
+    document.getElementById("totalOutflow").innerText = "₹ " + totalOutflow.toFixed(2);
+    document.getElementById("netCashFlow").innerText = "₹ " + net.toFixed(2);
+    document.getElementById("closingBalance").innerText = "₹ " + closing.toFixed(2);
+}
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

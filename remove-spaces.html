@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Remove Extra Spaces - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER (same as your system) */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TEXTAREA */
+textarea {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-family:monospace;
+    resize:none;
+}
+
+/* BUTTON (same style system) */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    padding:12px;
+    background:#f4f4f4;
+    border-radius:8px;
+    font-family:monospace;
+    text-align:left;
+    word-break:break-word;
+    white-space:pre-wrap;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>Remove Extra Spaces</h2>
+
+<textarea id="inputText" rows="8" placeholder="Paste text with extra spaces..."></textarea>
+
+<button onclick="removeSpaces()">⚡ Remove Spaces</button>
+
+<div class="result" id="result"></div>
+
+<button onclick="copyText()">📋 Copy Result</button>
+<button onclick="clearText()">🧹 Clear</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+function removeSpaces() {
+    const text = document.getElementById("inputText").value;
+
+    if (!text.trim()) {
+        document.getElementById("result").innerText = "⚠️ Please enter text";
+        return;
+    }
+
+    let cleaned = text.replace(/\s+/g, " ").trim();
+    document.getElementById("result").innerText = cleaned;
+}
+
+function clearText() {
+    document.getElementById("inputText").value = "";
+    document.getElementById("result").innerText = "";
+}
+
+function copyText() {
+    const text = document.getElementById("result").innerText;
+
+    if (!text.trim()) {
+        alert("Nothing to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Copied!"))
+        .catch(() => alert("Failed"));
+}
+
+</script>
+
+</body>
+</html>

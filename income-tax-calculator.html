@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Tax Calculator - Wayze</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:600px;
+    width:95%;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUTS */
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color:white;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { opacity:0.9; }
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+th { background:#f5f5f5; }
+
+/* PRINT */
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+    .print-area, .print-area * { visibility:visible; }
+    .print-area { position:absolute; top:0; left:0; width:100%; padding:10px; }
+    .print-title { display:block; text-align:center; font-size:22px; font-weight:bold; margin-bottom:15px; }
+    input, button, .navbar, .footer { display:none !important; }
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+}
+
+/* NOTE */
+.note {
+    font-size:12px;
+    color:#666;
+    margin-top:10px;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+<h2>🧾 Income Tax Calculator (India)</h2>
+
+<label>Annual Income (₹)</label>
+<input type="number" id="income" placeholder="Enter annual income">
+
+<label>Select Tax Regime</label>
+<select id="regime">
+<option value="new">New Regime</option>
+<option value="old">Old Regime</option>
+</select>
+
+<div class="print-area">
+<h2 class="print-title">Income Tax Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Details</th>
+<th>Amount (₹)</th>
+</tr>
+</thead>
+<tbody id="taxTable"></tbody>
+</table>
+</div>
+
+<button onclick="calculateTax()">⚡ Calculate Tax</button>
+<button onclick="window.print()">🧾 Print / Save PDF</button>
+
+<p class="note">*Includes standard deduction & rebate as per latest rules.</p>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculateTax(){
+    let income = parseFloat(document.getElementById("income").value);
+    let regime = document.getElementById("regime").value;
+
+    if(isNaN(income)){
+        alert("Please enter income");
+        return;
+    }
+
+    let standardDeduction = 50000;
+    let taxableIncome = income - standardDeduction;
+    if(taxableIncome < 0) taxableIncome = 0;
+
+    let tax = 0;
+
+    if(regime === "new"){
+        if(taxableIncome <= 300000) tax = 0;
+        else if(taxableIncome <= 600000) tax = (taxableIncome-300000)*0.05;
+        else if(taxableIncome <= 900000) tax = 15000 + (taxableIncome-600000)*0.10;
+        else if(taxableIncome <= 1200000) tax = 45000 + (taxableIncome-900000)*0.15;
+        else if(taxableIncome <= 1500000) tax = 90000 + (taxableIncome-1200000)*0.20;
+        else tax = 150000 + (taxableIncome-1500000)*0.30;
+
+        if(taxableIncome <= 700000) tax = 0;
+
+    } else {
+        if(taxableIncome <= 250000) tax = 0;
+        else if(taxableIncome <= 500000) tax = (taxableIncome-250000)*0.05;
+        else if(taxableIncome <= 1000000) tax = 12500 + (taxableIncome-500000)*0.20;
+        else tax = 112500 + (taxableIncome-1000000)*0.30;
+
+        if(taxableIncome <= 500000) tax = 0;
+    }
+
+    let cess = tax * 0.04;
+    let total = tax + cess;
+
+    document.getElementById("taxTable").innerHTML = `
+        <tr><td>Annual Income</td><td>₹ ${income.toFixed(2)}</td></tr>
+        <tr><td>Standard Deduction</td><td>₹ ${standardDeduction.toFixed(2)}</td></tr>
+        <tr><td>Taxable Income</td><td>₹ ${taxableIncome.toFixed(2)}</td></tr>
+        <tr><td>Tax (Before Cess)</td><td>₹ ${tax.toFixed(2)}</td></tr>
+        <tr><td>Health & Education Cess (4%)</td><td>₹ ${cess.toFixed(2)}</td></tr>
+        <tr><td><b>Total Tax Payable</b></td><td><b>₹ ${total.toFixed(2)}</b></td></tr>
+    `;
+}
+</script>
+
+</body>
+</html>

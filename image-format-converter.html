@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Format Converter - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUTS, SELECT, BUTTON */
+input[type="file"], select, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover { background:#5a6edc; }
+
+/* CANVAS */
+canvas {
+    max-width: 100%;
+    margin-top: 15px;
+    border-radius: 8px;
+    background: #eee;
+}
+
+/* STATUS TEXT */
+#status { margin-top: 10px; font-weight: bold; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin: 20px 15px; padding: 20px; }
+    input[type="file"], select, button { padding: 10px; font-size:14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+<h2>🖼️ Image Format Converter</h2>
+
+<label>Select Image</label>
+<input type="file" id="uploadImage" accept="image/*">
+
+<label>Select Target Format</label>
+<select id="formatSelect">
+    <option value="image/png">PNG</option>
+    <option value="image/jpeg">JPG</option>
+    <option value="image/webp">WebP</option>
+</select>
+
+<button id="convertBtn">🔄 Convert</button>
+<button id="downloadBtn">⬇️ Download</button>
+
+<div id="status"></div>
+<canvas id="canvas"></canvas>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let imgDataURL = "";
+let convertedDataURL = "";
+
+document.getElementById("uploadImage").addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            imgDataURL = canvas.toDataURL();
+            convertedDataURL = "";
+            document.getElementById("status").innerText = "Image loaded. Select format and click Convert!";
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+document.getElementById("convertBtn").addEventListener("click", function() {
+    if (!imgDataURL) {
+        alert("Please upload an image first!");
+        return;
+    }
+    const format = document.getElementById("formatSelect").value;
+    convertedDataURL = canvas.toDataURL(format);
+    document.getElementById("status").innerText = "✅ Conversion done!";
+});
+
+document.getElementById("downloadBtn").addEventListener("click", function() {
+    if (!convertedDataURL) {
+        alert("Please convert the image first!");
+        return;
+    }
+    const link = document.createElement("a");
+    link.href = convertedDataURL;
+    const ext = document.getElementById("formatSelect").value.split("/")[1];
+    link.download = "converted-image." + ext;
+    link.click();
+});
+</script>
+
+</body>
+</html>

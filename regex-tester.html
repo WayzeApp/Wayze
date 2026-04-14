@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regex Tester - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, textarea {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-family:monospace;
+}
+
+/* FLAGS (PERFECT ALIGNMENT) */
+.flags {
+    margin-top:12px;
+    text-align:left;
+}
+
+.flag-item {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+.flag-item input[type="checkbox"] {
+    width:16px;
+    height:16px;
+    margin:0;
+    flex-shrink:0;
+    cursor:pointer;
+}
+
+.flag-item span {
+    line-height:16px;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    padding:12px;
+    background:#f4f4f4;
+    border-radius:8px;
+    font-family:monospace;
+    text-align:left;
+    word-break:break-word;
+}
+
+/* HIGHLIGHT */
+mark {
+    background: yellow;
+    color: black;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🔍 Regex Tester</h2>
+
+<input type="text" id="pattern" placeholder="Enter regex (e.g. \\d+)" />
+
+<textarea id="text" rows="6" placeholder="Enter test text"></textarea>
+
+<!-- FLAGS -->
+<div class="flags">
+
+<label class="flag-item">
+<input type="checkbox" id="g" checked>
+<span>Global (g)</span>
+</label>
+
+<label class="flag-item">
+<input type="checkbox" id="i">
+<span>Ignore Case (i)</span>
+</label>
+
+<label class="flag-item">
+<input type="checkbox" id="m">
+<span>Multiline (m)</span>
+</label>
+
+</div>
+
+<button onclick="runRegex()">⚡ Test Regex</button>
+
+<div class="result" id="output"></div>
+
+<button onclick="copyResult()">📋 Copy Matches</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+function runRegex() {
+    const pattern = document.getElementById("pattern").value;
+    const text = document.getElementById("text").value;
+    const output = document.getElementById("output");
+
+    if (!pattern) {
+        output.innerText = "⚠️ Enter regex pattern";
+        return;
+    }
+
+    let flags = "";
+    if (document.getElementById("g").checked) flags += "g";
+    if (document.getElementById("i").checked) flags += "i";
+    if (document.getElementById("m").checked) flags += "m";
+
+    try {
+        const regex = new RegExp(pattern, flags);
+        let matches = [...text.matchAll(regex)];
+
+        if (matches.length === 0) {
+            output.innerText = "No matches found.";
+            return;
+        }
+
+        let highlighted = text.replace(regex, match => `<mark>${match}</mark>`);
+        let matchList = matches.map(m => m[0]).join("\n");
+
+        output.innerHTML = `
+<b>Matches:</b><br>${matchList}<br><br>
+<b>Preview:</b><br>${highlighted}
+`;
+
+    } catch (e) {
+        output.innerText = "❌ Invalid regex!";
+    }
+}
+
+function copyResult() {
+    const text = document.getElementById("output").innerText;
+
+    if (!text.trim()) {
+        alert("Nothing to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Copied!"))
+        .catch(() => alert("Failed"));
+}
+
+</script>
+
+</body>
+</html>

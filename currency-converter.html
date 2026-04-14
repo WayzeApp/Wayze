@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Currency Converter - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:520px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* SWAP BUTTON */
+.swap-btn {
+    background:#333;
+}
+.swap-btn:hover {
+    background:#555;
+}
+
+/* RESULT */
+.result {
+    margin-top:20px;
+    text-align:left;
+    line-height:1.6;
+    font-weight:600;
+}
+
+.highlight {
+    color:#667eea;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>💱 Currency Converter</h2>
+
+<input type="number" id="amount" placeholder="Enter amount" oninput="convertCurrency()">
+
+<select id="from" onchange="convertCurrency()">
+<option value="INR">INR - India</option>
+<option value="USD">USD - USA</option>
+<option value="EUR">EUR - Europe</option>
+<option value="GBP">GBP - UK</option>
+<option value="AED">AED - UAE</option>
+<option value="SGD">SGD - Singapore</option>
+<option value="AUD">AUD - Australia</option>
+<option value="CAD">CAD - Canada</option>
+<option value="JPY">JPY - Japan</option>
+<option value="CNY">CNY - China</option>
+<option value="CHF">CHF - Switzerland</option>
+<option value="MYR">MYR - Malaysia</option>
+</select>
+
+<button class="swap-btn" onclick="swapCurrencies()">🔄 Swap</button>
+
+<select id="to" onchange="convertCurrency()">
+<option value="USD">USD - USA</option>
+<option value="INR">INR - India</option>
+<option value="EUR">EUR - Europe</option>
+<option value="GBP">GBP - UK</option>
+<option value="AED">AED - UAE</option>
+<option value="SGD">SGD - Singapore</option>
+<option value="AUD">AUD - Australia</option>
+<option value="CAD">CAD - Canada</option>
+<option value="JPY">JPY - Japan</option>
+<option value="CNY">CNY - China</option>
+<option value="CHF">CHF - Switzerland</option>
+<option value="MYR">MYR - Malaysia</option>
+</select>
+
+<div class="result" id="result">Enter amount to see result</div>
+
+</div>
+</div>
+
+<script>
+async function convertCurrency() {
+    const amount = parseFloat(document.getElementById("amount").value);
+    const from = document.getElementById("from").value;
+    const to = document.getElementById("to").value;
+
+    if (isNaN(amount)) {
+        document.getElementById("result").innerText = "Enter amount to see result";
+        return;
+    }
+
+    try {
+        const res = await fetch(`https://open.er-api.com/v6/latest/${from}`);
+        const data = await res.json();
+
+        const rate = data.rates[to];
+        const result = (amount * rate).toFixed(4);
+
+        document.getElementById("result").innerHTML =
+        `💰 <span class="highlight">Result:</span><br><br>
+         ${amount} ${from} = <b>${result} ${to}</b>`;
+    } catch (error) {
+        document.getElementById("result").innerText =
+            "⚠️ Error fetching exchange rates!";
+    }
+}
+
+function swapCurrencies() {
+    let from = document.getElementById("from");
+    let to = document.getElementById("to");
+
+    let temp = from.value;
+    from.value = to.value;
+    to.value = temp;
+
+    convertCurrency();
+}
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

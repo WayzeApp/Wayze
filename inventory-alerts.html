@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory Alerts Tool - Wayze</title>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:700px;
+    width:95%;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON (WAYZE STYLE) */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color:white;
+    border:none;
+    border-radius:25px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { opacity:0.9; }
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+th { background:#f5f5f5; }
+
+/* STATUS COLORS */
+.low { background:#ffe5e5; font-weight:bold; }
+.ok { background:#e6ffed; }
+
+/* REMOVE BUTTON SMALL */
+.remove-btn {
+    padding:6px 10px;
+    border-radius:8px;
+    font-size:12px;
+}
+
+/* PRINT */
+.print-title { display:none; }
+
+@media print {
+    body * { visibility:hidden; }
+    .print-area, .print-area * { visibility:visible; }
+    .print-area { position:absolute; top:0; left:0; width:100%; padding:10px; }
+    .print-title { display:block; text-align:center; font-size:22px; font-weight:bold; margin-bottom:15px; }
+    input, button, .navbar, .footer { display:none !important; }
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+<h2>📦 Inventory Alerts Tool</h2>
+
+<label>Product Name</label>
+<input type="text" id="name" placeholder="Enter product name">
+
+<label>Current Stock</label>
+<input type="number" id="stock" placeholder="Enter current stock">
+
+<label>Minimum Stock Level</label>
+<input type="number" id="min" placeholder="Enter minimum level">
+
+<button onclick="addProduct()">➕ Add Product</button>
+
+<div class="print-area">
+<h2 class="print-title">Inventory Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Stock</th>
+<th>Minimum</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody id="inventoryTable"></tbody>
+</table>
+</div>
+
+<button onclick="window.print()">🧾 Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function addProduct(){
+    let name = document.getElementById("name").value.trim();
+    let stock = parseInt(document.getElementById("stock").value);
+    let min = parseInt(document.getElementById("min").value);
+
+    if(!name || isNaN(stock) || isNaN(min)){
+        alert("Enter all details");
+        return;
+    }
+
+    let status = stock <= min ? "⚠️ Low Stock" : "✅ In Stock";
+    let rowClass = stock <= min ? "low" : "ok";
+
+    let row = document.createElement("tr");
+    row.className = rowClass;
+
+    row.innerHTML = `
+        <td>${name}</td>
+        <td>${stock}</td>
+        <td>${min}</td>
+        <td>${status}</td>
+        <td><button class="remove-btn" onclick="this.closest('tr').remove()">❌</button></td>
+    `;
+
+    document.getElementById("inventoryTable").appendChild(row);
+
+    document.getElementById("name").value="";
+    document.getElementById("stock").value="";
+    document.getElementById("min").value="";
+}
+</script>
+
+</body>
+</html>

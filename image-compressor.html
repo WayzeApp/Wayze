@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Compressor - Wayze</title>
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUTS & BUTTONS */
+input[type="file"], input[type="range"], button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover { background:#5a6edc; }
+
+/* IMAGE PREVIEW */
+img {
+    max-width: 100%;
+    margin-top: 15px;
+    border-radius: 8px;
+}
+
+/* STATUS TEXT */
+#status { margin-top: 10px; font-weight: bold; }
+#size { margin-top: 5px; font-size: 14px; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin: 20px 15px; padding: 20px; }
+    input[type="file"], input[type="range"], button { padding: 10px; font-size:14px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div> <!-- Updated icon + text here -->
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN CONTAINER -->
+<div class="container">
+<h2>🖼️ Image Compressor</h2>
+
+<label>Select Image</label>
+<input type="file" id="uploadImage" accept="image/*">
+
+<label>Compression Quality (0.1 - 1)</label>
+<input type="range" id="quality" min="0.1" max="1" step="0.1" value="0.7">
+
+<button id="compressBtn">⚡ Compress</button>
+<button id="downloadBtn">⬇️ Download</button>
+
+<div id="status"></div>
+<div id="size"></div>
+
+<img id="preview">
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<!-- JS -->
+<script>
+let compressedData = "";
+
+document.getElementById("compressBtn").addEventListener("click", function () {
+    const fileInput = document.getElementById("uploadImage");
+    const quality = parseFloat(document.getElementById("quality").value);
+
+    if (!fileInput.files.length) { alert("Please select an image!"); return; }
+
+    document.getElementById("status").innerText = "⏳ Processing...";
+
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const img = new Image();
+        img.onload = function () {
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const newData = canvas.toDataURL("image/jpeg", quality);
+            const originalSize = file.size;
+            const newSize = Math.round((newData.length * 3 / 4));
+
+            if (newSize < originalSize) {
+                compressedData = newData;
+                document.getElementById("preview").src = compressedData;
+                const reduction = (((originalSize - newSize) / originalSize) * 100).toFixed(1);
+                document.getElementById("size").innerText =
+                    `Original: ${(originalSize/1024).toFixed(2)} KB | Compressed: ${(newSize/1024).toFixed(2)} KB | Reduced: ${reduction}%`;
+                document.getElementById("status").innerText = "✅ Compression successful!";
+            } else {
+                compressedData = e.target.result;
+                document.getElementById("preview").src = compressedData;
+                document.getElementById("status").innerText = "⚠️ Compression not effective. Original kept.";
+                document.getElementById("size").innerText = `Original: ${(originalSize/1024).toFixed(2)} KB`;
+            }
+        };
+        img.onerror = function () { alert("Error loading image!"); };
+        img.src = e.target.result;
+    };
+    reader.onerror = function () { alert("Error reading file!"); };
+    reader.readAsDataURL(file);
+});
+
+document.getElementById("downloadBtn").addEventListener("click", function () {
+    if (!compressedData) { alert("No image to download!"); return; }
+    const a = document.createElement("a");
+    a.href = compressedData;
+    a.download = "compressed.jpg";
+    a.click();
+});
+</script>
+
+</body>
+</html>

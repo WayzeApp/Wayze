@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Text Cleaner - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+
+.navbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TEXTAREA */
+textarea {
+    width:100%;
+    min-height:150px;
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON (FLAT STYLE) */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    padding:12px;
+    background:#f5f5f5;
+    border:1px solid #ccc;
+    border-radius:6px;
+    text-align:left;
+    font-family:monospace;
+    white-space:pre-wrap;
+    max-height:150px;
+    overflow-y:auto;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🧹 Text Cleaner</h2>
+
+<textarea id="inputText" placeholder="Paste your text here..."></textarea>
+
+<button onclick="removeSpaces()">Remove Extra Spaces</button>
+<button onclick="removeLineBreaks()">Remove Line Breaks</button>
+<button onclick="removeDuplicates()">Remove Duplicate Lines</button>
+<button onclick="trimText()">Trim Text</button>
+<button onclick="copyText()">Copy Result</button>
+<button onclick="clearText()">Clear</button>
+
+<div class="result" id="result">Result will appear here...</div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function removeSpaces(){
+    let text = document.getElementById("inputText").value;
+    document.getElementById("result").innerText = text.replace(/\s+/g,' ').trim();
+}
+
+function removeLineBreaks(){
+    let text = document.getElementById("inputText").value;
+    document.getElementById("result").innerText = text.replace(/\n/g,' ');
+}
+
+function removeDuplicates(){
+    let lines = document.getElementById("inputText").value.split('\n');
+    document.getElementById("result").innerText = [...new Set(lines)].join('\n');
+}
+
+function trimText(){
+    document.getElementById("result").innerText = document.getElementById("inputText").value.trim();
+}
+
+function copyText(){
+    let text = document.getElementById("result").innerText;
+
+    if(!text || text.includes("appear")){
+        alert("Nothing to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(text);
+    alert("Copied!");
+}
+
+function clearText(){
+    document.getElementById("inputText").value="";
+    document.getElementById("result").innerText="Result will appear here...";
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keyword Density Checker - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 600px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* TEXTAREA */
+textarea {
+    width: 100%;
+    min-height: 160px;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-family: monospace;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT TABLE */
+.result {
+    margin-top: 20px;
+    max-height: 250px;
+    overflow-y: auto;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+th {
+    background: #667eea;
+    color: white;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+
+    textarea, button {
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🔍 Keyword Density Checker</h2>
+
+<textarea id="textInput" placeholder="Paste your content here..."></textarea>
+
+<button onclick="analyzeText()">⚡ Analyze</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function analyzeText() {
+    let text = document.getElementById("textInput").value.toLowerCase();
+
+    if (!text.trim()) {
+        alert("Enter some text!");
+        return;
+    }
+
+    text = text.replace(/[^a-z0-9\s]/g, "");
+
+    let words = text.split(/\s+/);
+    let totalWords = words.length;
+
+    let freq = {};
+
+    words.forEach(word => {
+        if (word.length > 2) {
+            freq[word] = (freq[word] || 0) + 1;
+        }
+    });
+
+    let sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]);
+
+    let html = "<table><tr><th>Keyword</th><th>Count</th><th>Density %</th></tr>";
+
+    sorted.slice(0, 20).forEach(([word, count]) => {
+        let percent = ((count / totalWords) * 100).toFixed(2);
+        html += `<tr><td>${word}</td><td>${count}</td><td>${percent}%</td></tr>`;
+    });
+
+    html += "</table>";
+
+    document.getElementById("result").innerHTML = html;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Revenue Estimator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* LABEL */
+label {
+    display:block;
+    text-align:left;
+    margin-top:12px;
+    font-weight:600;
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:10px;
+    margin-top:8px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-family:Arial, sans-serif;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT */
+.result {
+    margin-top:12px;
+    padding:10px;
+    font-size:16px;
+    font-weight:600;
+    text-align:center;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>Revenue Estimator</h2>
+
+<label>Price per Product (₹)</label>
+<input type="number" id="price" placeholder="Enter price">
+
+<label>Number of Customers</label>
+<input type="number" id="customers" placeholder="Enter customers">
+
+<label>Conversion Rate (%)</label>
+<input type="number" id="conversion" placeholder="Enter conversion %">
+
+<button onclick="calculateRevenue()">⚡ Calculate Revenue</button>
+
+<div class="result" id="daily"></div>
+<div class="result" id="monthly"></div>
+<div class="result" id="yearly"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+function calculateRevenue() {
+
+    let price = parseFloat(document.getElementById("price").value);
+    let customers = parseFloat(document.getElementById("customers").value);
+    let conversion = parseFloat(document.getElementById("conversion").value);
+
+    if (!price || !customers || !conversion) {
+        document.getElementById("daily").innerText = "⚠️ Please enter all values";
+        document.getElementById("monthly").innerText = "";
+        document.getElementById("yearly").innerText = "";
+        return;
+    }
+
+    let convertedCustomers = customers * (conversion / 100);
+
+    let dailyRevenue = convertedCustomers * price;
+    let monthlyRevenue = dailyRevenue * 30;
+    let yearlyRevenue = dailyRevenue * 365;
+
+    document.getElementById("daily").innerText =
+        "Daily Revenue: ₹ " + dailyRevenue.toFixed(2);
+
+    document.getElementById("monthly").innerText =
+        "Monthly Revenue: ₹ " + monthlyRevenue.toFixed(2);
+
+    document.getElementById("yearly").innerText =
+        "Yearly Revenue: ₹ " + yearlyRevenue.toFixed(2);
+}
+
+</script>
+
+</body>
+</html>

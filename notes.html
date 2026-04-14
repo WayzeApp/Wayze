@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes Tool - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT AREA */
+form {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    padding: 10px 15px;
+    border-radius: 6px;
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* NOTES LIST */
+ul {
+    list-style: none;
+    margin-top: 20px;
+    padding: 0;
+}
+
+li {
+    background: #f4f6ff;
+    margin: 8px 0;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-break: break-word;
+}
+
+/* ACTION BUTTONS */
+.actions button {
+    margin-left: 5px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    padding: 0;
+}
+
+/* COLORS */
+.copy-btn { background:#667eea; }
+.copy-btn:hover { background:#5a6edc; }
+
+.share-btn { background:#22c55e; }
+.share-btn:hover { background:#1da64f; }
+
+.delete-btn { background:#ff5a5a; }
+.delete-btn:hover { background:#e04a4a; }
+
+/* STATUS */
+.status {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>📝 Notes Tool</h2>
+
+<form onsubmit="addNote(); return false;">
+    <input type="text" id="noteInput" placeholder="Write a note...">
+    <button type="submit">➕</button>
+</form>
+
+<div class="status" id="status"></div>
+
+<ul id="noteList"></ul>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+let notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+function renderNotes() {
+    const list = document.getElementById('noteList');
+    list.innerHTML = '';
+
+    notes.forEach((note, index) => {
+        const li = document.createElement('li');
+
+        li.innerHTML = `
+            <span>${note}</span>
+            <div class="actions">
+                <button class="copy-btn" onclick="copyNote(${index})">📋</button>
+                <button class="share-btn" onclick="shareNote(${index})">📤</button>
+                <button class="delete-btn" onclick="deleteNote(${index})">❌</button>
+            </div>
+        `;
+
+        list.appendChild(li);
+    });
+}
+
+function addNote() {
+    const input = document.getElementById('noteInput');
+
+    if(input.value.trim() === ''){
+        setStatus("⚠️ Enter a note");
+        return;
+    }
+
+    notes.push(input.value.trim());
+    input.value = "";
+    save();
+    setStatus("✅ Note added");
+}
+
+function deleteNote(index) {
+    notes.splice(index,1);
+    save();
+    setStatus("🗑️ Note deleted");
+}
+
+function copyNote(index) {
+    navigator.clipboard.writeText(notes[index]);
+    setStatus("📋 Copied");
+}
+
+function shareNote(index) {
+    if(navigator.share){
+        navigator.share({
+            title: 'Wayze Note',
+            text: notes[index],
+        });
+    } else {
+        setStatus("⚠️ Share not supported");
+    }
+}
+
+function save(){
+    localStorage.setItem('notes', JSON.stringify(notes));
+    renderNotes();
+}
+
+function setStatus(msg){
+    document.getElementById("status").innerText = msg;
+}
+
+renderNotes();
+</script>
+
+</body>
+</html>

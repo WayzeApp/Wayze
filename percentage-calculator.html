@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Percentage Calculator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width:500px;
+    width:95%;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    padding:12px;
+    background:#f4f4f4;
+    border-radius:8px;
+    font-family:monospace;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>📊 Percentage Calculator</h2>
+
+<select id="type">
+    <option value="1">X is what % of Y?</option>
+    <option value="2">What is X% of Y?</option>
+    <option value="3">Increase X by Y%</option>
+</select>
+
+<input type="number" id="num1" placeholder="Enter first value">
+<input type="number" id="num2" placeholder="Enter second value">
+
+<button onclick="calculate()">⚡ Calculate</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculate() {
+    let type = document.getElementById("type").value;
+    let x = parseFloat(document.getElementById("num1").value);
+    let y = parseFloat(document.getElementById("num2").value);
+
+    if (isNaN(x) || isNaN(y)) {
+        document.getElementById("result").innerText = "Enter valid values!";
+        return;
+    }
+
+    let result;
+
+    if (type == "1") {
+        if (y === 0) {
+            document.getElementById("result").innerText = "Cannot divide by zero!";
+            return;
+        }
+        result = (x / y) * 100;
+        document.getElementById("result").innerText =
+            `${x} is ${result.toFixed(2)}% of ${y}`;
+    }
+    else if (type == "2") {
+        result = (x / 100) * y;
+        document.getElementById("result").innerText =
+            `${x}% of ${y} is ${result.toFixed(2)}`;
+    }
+    else if (type == "3") {
+        result = x + (x * y / 100);
+        document.getElementById("result").innerText =
+            `Final Value: ${result.toFixed(2)}`;
+    }
+}
+</script>
+
+</body>
+</html>

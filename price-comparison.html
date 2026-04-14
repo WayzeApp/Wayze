@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Price Comparison Tool - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing:border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:700px;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:10px;
+    margin:6px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:15px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* SPECIAL BUTTONS */
+.add-btn { background:#28a745; }
+.add-btn:hover { background:#218838; }
+
+.remove-btn { background:#ff5a5a; }
+.remove-btn:hover { background:#e04a4a; }
+
+/* PRODUCT BLOCK */
+.product-block {
+    border:1px solid #eee;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    background:#fafafa;
+}
+
+/* TABLE */
+table {
+    width:100%;
+    border-collapse:collapse;
+    margin-top:15px;
+}
+th, td {
+    border:1px solid #ddd;
+    padding:8px;
+    text-align:center;
+}
+th {
+    background:#667eea;
+    color:white;
+}
+
+/* BEST DEAL */
+.best {
+    background:#d4edda;
+    font-weight:bold;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin:20px 12px;
+        padding:20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>💲 Smart Price Comparison Tool</h2>
+
+<div id="productContainer"></div>
+
+<button class="add-btn" onclick="addProduct()">➕ Add Product</button>
+
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Final Price (₹)</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody id="resultTable"></tbody>
+</table>
+
+<button onclick="comparePrices()">⚡ Compare Prices</button>
+<button onclick="window.print()">🖨️ Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+let productCount = 0;
+
+function addProduct(){
+    productCount++;
+
+    let div = document.createElement("div");
+    div.classList.add("product-block");
+
+    div.innerHTML = `
+        <h3>Product ${productCount}</h3>
+        <input type="text" class="name" placeholder="Platform / Shop name">
+        <input type="number" class="price" placeholder="Price (₹)">
+        <input type="number" class="discount" placeholder="Discount (%)">
+        <input type="number" class="shipping" placeholder="Shipping Cost (₹)">
+        <button class="remove-btn" onclick="removeProduct(this)">❌ Remove</button>
+    `;
+
+    document.getElementById("productContainer").appendChild(div);
+}
+
+function removeProduct(btn){
+    btn.parentElement.remove();
+    updateNumbers();
+}
+
+function updateNumbers(){
+    let blocks = document.querySelectorAll(".product-block h3");
+    blocks.forEach((h3, i)=>{
+        h3.innerText = `Product ${i+1}`;
+    });
+}
+
+function calculateFinal(price, discount, shipping){
+    if(isNaN(price)) return null;
+    discount = discount || 0;
+    shipping = shipping || 0;
+
+    let discounted = price - (price * discount / 100);
+    return discounted + shipping;
+}
+
+function comparePrices(){
+    let blocks = document.querySelectorAll(".product-block");
+    let products = [];
+
+    blocks.forEach((block, index) => {
+        let name = block.querySelector(".name").value || `Product ${index+1}`;
+        let price = parseFloat(block.querySelector(".price").value);
+        let discount = parseFloat(block.querySelector(".discount").value);
+        let shipping = parseFloat(block.querySelector(".shipping").value);
+
+        let finalPrice = calculateFinal(price, discount, shipping);
+
+        if(finalPrice !== null){
+            products.push({name: name, price: finalPrice});
+        }
+    });
+
+    if(products.length < 2){
+        alert("Add at least 2 products");
+        return;
+    }
+
+    let minPrice = Math.min(...products.map(p => p.price));
+
+    let html = "";
+    products.forEach(p => {
+        let isBest = p.price === minPrice;
+        html += `
+        <tr class="${isBest ? 'best' : ''}">
+            <td>${p.name}</td>
+            <td>₹ ${p.price.toFixed(2)}</td>
+            <td>${isBest ? '🏆 Best Deal' : ''}</td>
+        </tr>`;
+    });
+
+    document.getElementById("resultTable").innerHTML = html;
+}
+
+// Default products
+addProduct();
+addProduct();
+</script>
+
+</body>
+</html>

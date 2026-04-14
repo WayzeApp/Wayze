@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daily Planner - Wayze</title>
+
+<style>
+
+* { box-sizing:border-box; }
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; }
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:550px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* FORM */
+form {
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+    flex-wrap:wrap;
+}
+
+input {
+    flex:1;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+}
+
+/* BUTTON */
+button {
+    padding:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* TASK LIST */
+ul { list-style:none; padding:0; margin-top:20px; }
+
+li {
+    background:#f5f5f5;
+    margin:8px 0;
+    padding:12px;
+    border-radius:8px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    word-break:break-word;
+}
+
+li.completed {
+    text-decoration:line-through;
+    color:#888;
+}
+
+/* ACTION BUTTONS */
+.action-btn {
+    width:35px;
+    height:35px;
+    border-radius:50%;
+    border:none;
+    cursor:pointer;
+    margin-left:5px;
+    font-size:16px;
+}
+
+/* COLORS */
+.done-btn { background:#22c55e; }
+.delete-btn { background:#ff5a5a; }
+.whatsapp-btn { background:#25D366; }
+.copy-btn { background:#667eea; }
+
+.done-btn:hover { background:#1da64f; }
+.delete-btn:hover { background:#e04a4a; }
+.whatsapp-btn:hover { background:#1ebe56; }
+.copy-btn:hover { background:#5a6edc; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container { margin:0 10px; }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+<h2>📅 Daily Planner</h2>
+
+<form onsubmit="addTask(); return false;">
+    <input type="date" id="taskDate" required>
+    <input type="text" id="taskInput" placeholder="Add a task" required>
+    <button type="submit">Add</button>
+</form>
+
+<ul id="taskList"></ul>
+
+</div>
+</div>
+
+<script>
+
+let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+
+// Render
+function renderTasks() {
+    const list = document.getElementById('taskList');
+    const selectedDate = document.getElementById('taskDate').value;
+
+    list.innerHTML = '';
+
+    tasks.forEach((task,index)=>{
+        if(task.date===selectedDate){
+            const li = document.createElement('li');
+            li.className = task.completed ? 'completed' : '';
+
+            li.innerHTML = `
+                ${task.text}
+                <span>
+                    <button class="action-btn done-btn" onclick="toggleDone(${index})">✔️</button>
+                    <button class="action-btn copy-btn" onclick="copyTask(${index})">📋</button>
+                    <button class="action-btn whatsapp-btn" onclick="shareTaskWhatsApp(${index})">💬</button>
+                    <button class="action-btn delete-btn" onclick="deleteTask(${index})">🗑️</button>
+                </span>
+            `;
+            list.appendChild(li);
+        }
+    });
+}
+
+// Add
+function addTask(){
+    const input = document.getElementById('taskInput');
+    const date = document.getElementById('taskDate').value;
+
+    if(input.value.trim()==='') return alert('Enter a task');
+
+    tasks.push({
+        text:input.value.trim(),
+        date:date,
+        completed:false
+    });
+
+    input.value='';
+    saveAndRender();
+}
+
+// Delete
+function deleteTask(index){
+    tasks.splice(index,1);
+    saveAndRender();
+}
+
+// Toggle
+function toggleDone(index){
+    tasks[index].completed = !tasks[index].completed;
+    saveAndRender();
+}
+
+// Copy
+function copyTask(index){
+    navigator.clipboard.writeText(tasks[index].text);
+    alert("Copied!");
+}
+
+// WhatsApp
+function shareTaskWhatsApp(index){
+    const task = tasks[index];
+    const text = `Task: ${task.text}\nDate: ${task.date}`;
+    window.open("https://wa.me/?text=" + encodeURIComponent(text));
+}
+
+// Save
+function saveAndRender(){
+    localStorage.setItem('tasks',JSON.stringify(tasks));
+    renderTasks();
+}
+
+// Init
+document.getElementById('taskDate').addEventListener('change',renderTasks);
+document.getElementById('taskDate').value = new Date().toISOString().split('T')[0];
+renderTasks();
+
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

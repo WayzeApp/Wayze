@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meta Tag Generator - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 600px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, textarea {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+textarea {
+    min-height: 100px;
+    font-family: monospace;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 15px;
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT BOX */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f4f6ff;
+    text-align: left;
+    font-family: monospace;
+    white-space: pre-line;
+    border: 1px solid #ddd;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+
+    input, textarea, button {
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🏷️ Meta Tag Generator</h2>
+
+<input type="text" id="titleInput" placeholder="Page Title">
+<textarea id="descInput" placeholder="Page Description"></textarea>
+<input type="text" id="keywordsInput" placeholder="Keywords (comma-separated)">
+<input type="text" id="authorInput" placeholder="Author (optional)">
+
+<button onclick="generateMetaTags()">⚡ Generate Meta Tags</button>
+
+<div class="result" id="result"></div>
+
+<button onclick="copyResult()">📋 Copy Meta Tags</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function generateMetaTags() {
+    const title = document.getElementById('titleInput').value.trim();
+    const desc = document.getElementById('descInput').value.trim();
+    const keywords = document.getElementById('keywordsInput').value.trim();
+    const author = document.getElementById('authorInput').value.trim();
+
+    if (!title && !desc && !keywords) {
+        alert("Please enter at least one field!");
+        return;
+    }
+
+    let html = "";
+
+    if (title) html += `<title>${title}</title>\n`;
+    if (desc) html += `<meta name="description" content="${desc}">\n`;
+    if (keywords) html += `<meta name="keywords" content="${keywords}">\n`;
+    if (author) html += `<meta name="author" content="${author}">\n`;
+
+    document.getElementById('result').innerText = html;
+}
+
+function copyResult() {
+    const res = document.getElementById('result').innerText;
+
+    if (!res) {
+        alert("Nothing to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(res)
+        .then(() => {
+            document.getElementById('result').innerText += "\n\n✅ Copied!";
+        })
+        .catch(() => alert("Failed to copy."));
+}
+</script>
+
+</body>
+</html>

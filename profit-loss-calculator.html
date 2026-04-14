@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profit & Loss Calculator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    flex:1;
+    max-width:500px;
+    width:90%;
+    margin:40px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border-radius:8px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result-box {
+    margin-top:15px;
+    padding:12px;
+    border-radius:8px;
+    background:#f4f4f4;
+    font-weight:bold;
+}
+
+.profit { color:green; }
+.loss { color:red; }
+.neutral { color:#333; }
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>💰 Profit & Loss Calculator</h2>
+
+<input type="number" id="cost" placeholder="Cost Price (₹)">
+<input type="number" id="sell" placeholder="Selling Price (₹)">
+
+<button onclick="calculate()">⚡ Calculate</button>
+
+<div class="result-box" id="result"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculate() {
+
+    let cost = parseFloat(document.getElementById("cost").value);
+    let sell = parseFloat(document.getElementById("sell").value);
+
+    // ✅ FIX: allow 0 values properly
+    if (isNaN(cost) || isNaN(sell)) {
+        document.getElementById("result").innerHTML = "Enter valid values";
+        return;
+    }
+
+    let diff = sell - cost;
+    let percent = (diff / cost) * 100;
+
+    let resultHTML = "";
+
+    if (diff > 0) {
+        resultHTML = `
+            <span class="profit">
+            Profit: ₹ ${diff.toFixed(2)} <br>
+            Profit %: ${percent.toFixed(2)}%
+            </span>`;
+    }
+    else if (diff < 0) {
+        resultHTML = `
+            <span class="loss">
+            Loss: ₹ ${Math.abs(diff).toFixed(2)} <br>
+            Loss %: ${Math.abs(percent).toFixed(2)}%
+            </span>`;
+    }
+    else {
+        resultHTML = `<span class="neutral">No Profit No Loss</span>`;
+    }
+
+    document.getElementById("result").innerHTML = resultHTML;
+}
+</script>
+
+</body>
+</html>

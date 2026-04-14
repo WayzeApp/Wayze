@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Body Fat Calculator - Wayze</title>
+
+<style>
+
+/* BODY */
+body {
+    margin:0;
+    font-family:'Poppins','Segoe UI',sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* NAVBAR */
+.navbar {
+    position:sticky;
+    top:0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a {
+    color:white;
+    text-decoration:none;
+}
+
+/* MAIN */
+.main {
+    flex:1;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+/* CARD */
+.container {
+    width:100%;
+    max-width:500px;
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    text-align:center;
+    box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    box-sizing:border-box;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    padding:12px;
+    margin-top:12px;
+    background:#667eea;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT */
+.result {
+    margin-top:20px;
+    font-weight:600;
+    font-size:18px;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .container {
+        margin:0 10px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+<div class="container">
+
+    <h2>Body Fat Calculator</h2>
+
+    <input type="number" id="age" placeholder="Age (years)">
+    
+    <select id="gender">
+        <option value="male">Male</option>
+        <option value="female">Female</option>
+    </select>
+
+    <input type="number" id="height" placeholder="Height (cm)">
+    <input type="number" id="weight" placeholder="Weight (kg)">
+    <input type="number" id="waist" placeholder="Waist (cm)">
+    <input type="number" id="neck" placeholder="Neck (cm)">
+    <input type="number" id="hip" placeholder="Hip (cm - only for female)">
+
+    <button onclick="calculateBodyFat()">Calculate Body Fat</button>
+
+    <div class="result" id="result"></div>
+
+</div>
+</div>
+
+<script>
+function calculateBodyFat() {
+
+    let age = parseInt(document.getElementById("age").value);
+    let gender = document.getElementById("gender").value;
+    let height = parseFloat(document.getElementById("height").value);
+    let weight = parseFloat(document.getElementById("weight").value);
+    let waist = parseFloat(document.getElementById("waist").value);
+    let neck = parseFloat(document.getElementById("neck").value);
+    let hip = parseFloat(document.getElementById("hip").value);
+
+    if (!age || !height || !weight || !waist || !neck || (gender === "female" && !hip)) {
+        document.getElementById("result").innerText = "⚠️ Please fill all required fields";
+        return;
+    }
+
+    let bodyFat;
+
+    if (gender === "male") {
+        bodyFat = 495 / (
+            1.0324 
+            - 0.19077 * Math.log10(waist - neck) 
+            + 0.15456 * Math.log10(height)
+        ) - 450;
+    } else {
+        bodyFat = 495 / (
+            1.29579 
+            - 0.35004 * Math.log10(waist + hip - neck) 
+            + 0.22100 * Math.log10(height)
+        ) - 450;
+    }
+
+    document.getElementById("result").innerHTML =
+        `Estimated Body Fat: ${bodyFat.toFixed(2)}%`;
+}
+</script>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IP Address Lookup - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUTS & BUTTONS */
+input, button {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top: 15px;
+    text-align: left;
+    border-radius: 8px;
+    padding: 10px;
+    background: #f5f5f5;
+    font-size: 14px;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin: 20px 15px; padding: 20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+<h2>🌐 IP Address Lookup</h2>
+
+<input type="text" id="ipInput" placeholder="Enter IP (leave blank for your IP)">
+
+<button onclick="lookupIP()">Lookup IP</button>
+<button onclick="copyResults()">Copy Results</button>
+
+<div class="result" id="result"></div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+async function lookupIP() {
+    const ip = document.getElementById('ipInput').value.trim();
+    const resultDiv = document.getElementById('result');
+
+    resultDiv.innerText = "Processing...";
+
+    try {
+        const url = ip ? `https://ipwhois.app/json/${ip}` : `https://ipwhois.app/json/`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        if (data.success === false) {
+            resultDiv.innerText = "Error: " + data.message;
+            return;
+        }
+
+        resultDiv.innerText =
+`IP Address: ${data.ip}
+City: ${data.city}
+Region: ${data.region}
+Country: ${data.country}
+Postal: ${data.postal}
+ISP: ${data.org}
+Timezone: ${data.timezone}`;
+
+    } catch (err) {
+        resultDiv.innerText = "Failed to fetch IP info.";
+    }
+}
+
+function copyResults() {
+    const resultDiv = document.getElementById('result');
+
+    if (!resultDiv.innerText.trim()) {
+        alert("No results to copy!");
+        return;
+    }
+
+    navigator.clipboard.writeText(resultDiv.innerText)
+        .then(() => alert("Copied!"))
+        .catch(() => alert("Failed to copy."));
+}
+</script>
+
+</body>
+</html>

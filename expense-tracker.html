@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expense Tracker - Wayze</title>
+
+<style>
+* { box-sizing: border-box; }
+
+/* PAGE */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAV */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+    flex: 1;
+    max-width: 600px;
+    width: 95%;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+/* TITLE WITH EMOJI */
+h2 {
+    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+    text-align: center;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    background: #667eea;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* TABLE */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    font-size: 14px; /* smaller font so it fits on mobile */
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 6px;
+    text-align: center;
+}
+
+/* TOTAL */
+.total {
+    margin-top: 10px;
+    font-weight: bold;
+    text-align: right;
+}
+
+/* PRINT AREA */
+.print-area {
+    margin-top: 10px;
+}
+.print-title {
+    display: none;
+}
+
+/* FOOTER */
+footer {
+    background:#111; 
+    color:white; 
+    padding:20px; 
+    text-align:center;
+}
+
+/* PRINT CLEAN VIEW */
+@media print {
+    body * { visibility: hidden; }
+    .print-area, .print-area * { visibility: visible; }
+    .print-area { position: absolute; top: 0; left: 0; width: 100%; padding: 10px; }
+    .print-title { display: block; text-align: center; font-size: 22px; font-weight: bold; margin-bottom: 15px; }
+    input, button, .no-print, .navbar, footer { display: none !important; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div>Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<div class="container">
+
+<h2>💰 Expense Tracker</h2>
+
+<input type="text" id="name" placeholder="Expense Name">
+<input type="number" id="amount" placeholder="Amount (₹)">
+<input type="date" id="date">
+
+<button onclick="addExpense()">Add Expense</button>
+
+<!-- PRINT AREA -->
+<div class="print-area">
+
+<h2 class="print-title">Expense Report</h2>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Amount</th>
+<th>Date</th>
+<th class="no-print">Action</th>
+</tr>
+</thead>
+<tbody id="expenseList"></tbody>
+</table>
+
+<div class="total" id="total"></div>
+
+</div>
+
+<button class="no-print" onclick="window.print()">Print / Save PDF</button>
+
+</div>
+
+<footer>
+    © 2026 Wayze |
+</footer>
+
+<script>
+let total = 0;
+
+function addExpense() {
+    let name = document.getElementById("name").value;
+    let amount = parseFloat(document.getElementById("amount").value);
+    let date = document.getElementById("date").value;
+
+    if (!name || !amount || !date) {
+        alert("Enter all fields");
+        return;
+    }
+
+    total += amount;
+
+    let row = `
+    <tr>
+        <td>${name}</td>
+        <td>₹ ${amount}</td>
+        <td>${date}</td>
+        <td class="no-print">
+            <button onclick="removeExpense(this, ${amount})">X</button>
+        </td>
+    </tr>`;
+
+    document.getElementById("expenseList").innerHTML += row;
+
+    document.getElementById("total").innerText =
+        "Total Expense: ₹ " + total.toFixed(2);
+
+    document.getElementById("name").value = "";
+    document.getElementById("amount").value = "";
+    document.getElementById("date").value = "";
+}
+
+function removeExpense(btn, amount) {
+    btn.parentElement.parentElement.remove();
+    total -= amount;
+    document.getElementById("total").innerText =
+        "Total Expense: ₹ " + total.toFixed(2);
+}
+</script>
+
+</body>
+</html>

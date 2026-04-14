@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rewards Points Calculator - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+
+.navbar a {
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* CONTAINER */
+.container {
+    max-width:600px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width:100%;
+    margin-top:12px;
+    padding:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+    font-size:14px;
+}
+
+/* TABLE */
+table {
+    width:100%;
+    margin-top:15px;
+    border-collapse:collapse;
+}
+
+td {
+    border:1px solid #ccc;
+    padding:10px;
+    text-align:center;
+}
+
+.highlight {
+    background:#d4edda;
+    font-weight:bold;
+}
+
+/* 🌟 WAYZE BUTTON STYLE */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+
+button:hover {
+    background:#5a6edc;
+}
+
+/* 🖨 PRINT BUTTON = SAME WAYZE COLOR */
+button.print-btn {
+    background:#667eea !important;
+    color:white !important;
+}
+
+button.print-btn:hover {
+    background:#5a6edc !important;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+   <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🏅 Rewards Points Calculator</h2>
+
+<input type="number" id="amount" placeholder="Purchase Amount (₹)">
+<input type="number" id="pointsRate" placeholder="Points per ₹100">
+<input type="number" id="pointValue" placeholder="Value per point (₹)">
+
+<table>
+<tbody id="resultTable"></tbody>
+</table>
+
+<button onclick="calculatePoints()">Calculate</button>
+<button class="print-btn" onclick="window.print()">Print / Save PDF</button>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculatePoints(){
+    let amount = parseFloat(document.getElementById("amount").value);
+    let rate = parseFloat(document.getElementById("pointsRate").value);
+    let value = parseFloat(document.getElementById("pointValue").value);
+
+    if(isNaN(amount) || isNaN(rate) || isNaN(value)){
+        alert("Please enter all values");
+        return;
+    }
+
+    let points = (amount / 100) * rate;
+    let worth = points * value;
+
+    document.getElementById("resultTable").innerHTML = `
+        <tr><td>Purchase Amount</td><td>₹ ${amount}</td></tr>
+        <tr><td>Points Earned</td><td>${points.toFixed(0)}</td></tr>
+        <tr><td>Point Value</td><td>₹ ${value}</td></tr>
+        <tr class="highlight"><td>Total Reward Value</td><td>₹ ${worth.toFixed(2)}</td></tr>
+    `;
+}
+</script>
+
+</body>
+</html>

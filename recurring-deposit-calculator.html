@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recurring Deposit Calculator - Wayze</title>
+
+<!-- Google tag -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BBC2377YZF');
+</script>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+    font-family:Arial, sans-serif;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#111;
+    padding:15px 20px;
+    color:white;
+}
+.navbar a { color:white; text-decoration:none; font-weight:600; }
+
+/* CONTAINER */
+.container {
+    max-width:500px;
+    margin:60px auto;
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    text-align:center;
+    box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input, select {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+/* BUTTON */
+button {
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    border-radius:6px;
+    font-size:16px;
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+    font-weight:600;
+}
+button:hover { background:#5a6edc; }
+
+/* RESULT */
+.result {
+    margin-top:15px;
+    padding:12px;
+    background:#f4f4f4;
+    border-radius:8px;
+    font-family:monospace;
+    text-align:left;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container { margin:20px 15px; padding:20px; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>💰 Recurring Deposit Calculator</h2>
+
+<input type="number" id="monthly" placeholder="Monthly Deposit (₹)">
+<input type="number" id="rate" placeholder="Interest Rate (%)">
+<input type="number" id="months" placeholder="Time Period (Months)">
+
+<select id="freq">
+<option value="4">Quarterly</option>
+<option value="12">Monthly</option>
+</select>
+
+<button onclick="calculateRD()">⚡ Calculate</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+
+function calculateRD(){
+
+    let P = parseFloat(document.getElementById('monthly').value);
+    let r = parseFloat(document.getElementById('rate').value) / 100;
+    let n = parseInt(document.getElementById('freq').value);
+    let t = parseFloat(document.getElementById('months').value) / 12;
+
+    if(isNaN(P) || isNaN(r) || isNaN(n) || isNaN(t)){
+        document.getElementById('result').innerText = "⚠️ Enter all values correctly";
+        return;
+    }
+
+    // RD Formula (Corrected)
+    let maturity = P * ( (Math.pow(1 + r/n, n*t) - 1) / (1 - Math.pow(1 + r/n, -1/n)) );
+
+    let totalDeposit = P * (t * 12);
+    let interest = maturity - totalDeposit;
+
+    document.getElementById('result').innerHTML = `
+📌 Total Deposit: ₹ ${totalDeposit.toFixed(2)} <br>
+📈 Interest Earned: ₹ ${interest.toFixed(2)} <br>
+💰 Maturity Amount: ₹ ${maturity.toFixed(2)}
+`;
+}
+
+</script>
+
+</body>
+</html>

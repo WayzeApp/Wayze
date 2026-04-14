@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Eligibility Checker - Wayze</title>
+
+<style>
+* { box-sizing: border-box; margin:0; padding:0; }
+
+/* BODY */
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+/* NAVBAR */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #111;
+    padding: 15px 20px;
+    color: white;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* CONTAINER */
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+}
+button:hover {
+    background:#5a6edc;
+}
+
+/* RESULT BOX */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    background: #f4f6ff;
+    font-weight: 600;
+    line-height: 1.6;
+}
+
+/* FOOTER */
+.footer {
+    text-align:center;
+    padding:12px;
+    color:white;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    font-weight:600;
+    margin-top:auto;
+}
+
+/* MOBILE */
+@media(max-width:480px){
+    .container {
+        margin: 20px 15px;
+        padding: 20px;
+    }
+
+    input, button {
+        font-size:14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+    <div>⚡ Wayze</div>
+    <div><a href="../tools.html">Home</a></div>
+</div>
+
+<!-- MAIN -->
+<div class="container">
+
+<h2>🏦 Loan Eligibility Checker</h2>
+
+<input type="number" id="income" placeholder="Monthly Income (₹)">
+<input type="number" id="emi" placeholder="Existing EMI (₹)">
+<input type="number" id="rate" placeholder="Interest Rate (%)">
+<input type="number" id="years" placeholder="Loan Tenure (Years)">
+
+<button onclick="calculateLoan()">⚡ Check Eligibility</button>
+
+<div class="result" id="result"></div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">© 2026 Wayze</div>
+
+<script>
+function calculateLoan() {
+    let income = parseFloat(document.getElementById('income').value);
+    let emi = parseFloat(document.getElementById('emi').value) || 0;
+    let rate = parseFloat(document.getElementById('rate').value)/100/12;
+    let years = parseFloat(document.getElementById('years').value);
+
+    if(isNaN(income) || isNaN(rate) || isNaN(years)){
+        document.getElementById('result').innerText="⚠️ Please fill all required fields!";
+        return;
+    }
+
+    let maxEMI = income * 0.5 - emi;
+
+    if(maxEMI <= 0){
+        document.getElementById('result').innerText="❌ Not eligible for additional loan!";
+        return;
+    }
+
+    let n = years * 12;
+    let loanAmount = maxEMI * ((Math.pow(1+rate,n)-1)/(rate*Math.pow(1+rate,n)));
+
+    document.getElementById('result').innerHTML =
+        `💰 Eligible Loan Amount: ₹ ${loanAmount.toFixed(0)}<br>
+         📊 Max EMI: ₹ ${maxEMI.toFixed(0)}`;
+}
+</script>
+
+</body>
+</html>
