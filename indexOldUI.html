@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-BBC2377YZF"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  
+  gtag('js', new Date());
+  gtag('config', 'G-BBC2377YZF');
+  gtag('event', 'page_view', {
+  page_title: 'Dashboard',
+  page_path: '/dashboard'
+});
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wayze — Bill faster. Track stock. Get paid.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --brand:#5b4cff;
+  --brand-light:#8075ff;
+  --brand-dark:#3d2ee0;
+  --accent:#00e5b4;
+  --accent2:#ff6b6b;
+  --bg:#08080f;
+  --surface:#0f0f1a;
+  --surface2:#14142a;
+  --card:#181828;
+  --border:rgba(255,255,255,0.07);
+  --border2:rgba(255,255,255,0.12);
+  --text:#f0f0ff;
+  --muted:rgba(240,240,255,0.5);
+  --muted2:rgba(240,240,255,0.3);
+  --r:16px;
+  --r-lg:24px;
+  --r-xl:32px;
+}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  overflow-x:hidden;
+  line-height:1.6;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events:none;opacity:0.4;
+}
+.ambient{position:fixed;z-index:0;pointer-events:none;border-radius:50%;filter:blur(120px);opacity:0.12;}
+.amb1{width:600px;height:600px;top:-200px;left:-100px;background:var(--brand);}
+.amb2{width:500px;height:500px;top:40%;right:-150px;background:var(--accent);}
+.amb3{width:400px;height:400px;bottom:-100px;left:30%;background:var(--brand-dark);}
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 clamp(16px,4vw,48px);
+  height:64px;
+  background:rgba(8,8,15,0.8);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-logo{display:flex;align-items:center;gap:10px;cursor:pointer;text-decoration:none;}
+.logo-mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--brand),var(--brand-light));
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-mark svg{width:18px;height:18px;}
+.logo-name{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:var(--text);letter-spacing:-0.02em;}
+.nav-links{display:flex;align-items:center;gap:clamp(12px,2.5vw,32px);}
+.nav-links a{color:var(--muted);font-size:14px;font-weight:400;text-decoration:none;transition:color 0.2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-pill{
+  background:var(--brand);color:white;
+  padding:8px 18px;border-radius:99px;
+  font-size:13px;font-weight:500;
+  cursor:pointer;border:none;
+  font-family:'DM Sans',sans-serif;
+  transition:background 0.2s,transform 0.15s;
+  text-decoration:none;display:inline-block;
+}
+.nav-pill:hover{background:var(--brand-light);transform:scale(1.03);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--text);border-radius:2px;transition:0.3s;}
+.hero{
+  position:relative;z-index:1;
+  padding:clamp(100px,15vh,140px) clamp(16px,4vw,80px) 0;
+  max-width:1200px;margin:0 auto;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:clamp(32px,4vw,60px);
+  align-items:center;
+}
+.hero-left{}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(91,76,255,0.15);
+  border:1px solid rgba(91,76,255,0.35);
+  color:#a89fff;font-size:12px;font-weight:500;
+  padding:5px 14px;border-radius:99px;
+  margin-bottom:24px;letter-spacing:0.04em;text-transform:uppercase;
+}
+.hero-eyebrow::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;}
+h1.hero-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(36px,5vw,64px);
+  font-weight:800;line-height:1.08;
+  letter-spacing:-0.03em;
+  margin-bottom:20px;
+}
+h1.hero-title .grad{
+  background:linear-gradient(120deg,var(--brand-light),var(--accent));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero-sub{font-size:clamp(15px,1.5vw,17px);color:var(--muted);line-height:1.75;max-width:440px;margin-bottom:36px;}
+.hero-ctas{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:44px;}
+.btn-hero{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:13px 26px;border-radius:99px;
+  font-size:15px;font-weight:500;cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  text-decoration:none;transition:0.2s;border:none;
+}
+.btn-hero.primary{background:var(--brand);color:white;}
+.btn-hero.primary:hover{background:var(--brand-light);transform:translateY(-2px);}
+.btn-hero.ghost{background:transparent;color:var(--text);border:1.5px solid var(--border2);}
+.btn-hero.ghost:hover{border-color:rgba(255,255,255,0.3);background:rgba(255,255,255,0.05);}
+.btn-arrow{font-size:16px;transition:transform 0.2s;}
+.btn-hero:hover .btn-arrow{transform:translateX(3px);}
+.trust-pills{display:flex;flex-wrap:wrap;gap:10px;}
+.tpill{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);
+  border-radius:99px;padding:5px 12px;
+  font-size:12px;color:var(--muted);
+}
+.tpill .dot{width:5px;height:5px;background:var(--accent);border-radius:50%;}
+.hero-right{position:relative;display:flex;justify-content:center;align-items:flex-end;}
+.devices-wrap{position:relative;width:100%;height:clamp(340px,50vw,500px);}
+.device-laptop{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:clamp(260px,40vw,380px);}
+.laptop-body{width:100%;background:#1a1a2a;border-radius:10px 10px 0 0;border:1.5px solid rgba(255,255,255,0.12);overflow:hidden;aspect-ratio:16/10;}
+.laptop-screen{width:100%;height:100%;background:linear-gradient(150deg,#0d0d1e 0%,#131325 100%);padding:8px;display:flex;flex-direction:column;gap:5px;}
+.ls-bar{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.05);border-radius:5px;padding:4px 8px;}
+.ls-bar span{font-size:7px;color:#666;}
+.ls-dots{display:flex;gap:3px;}
+.ls-dots i{width:5px;height:5px;border-radius:50%;}
+.ls-dots i:nth-child(1){background:#ff5f57;}
+.ls-dots i:nth-child(2){background:#febc2e;}
+.ls-dots i:nth-child(3){background:#28c840;}
+.ls-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;flex:1;}
+.ls-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.07);border-radius:5px;padding:6px;}
+.ls-card .lc-label{font-size:5px;color:#666;margin-bottom:2px;}
+.ls-card .lc-val{font-size:9px;font-weight:700;color:#e0e0ff;}
+.ls-card .lc-val.green{color:#00e5b4;}
+.ls-card .lc-val.yellow{color:#fbbf24;}
+.ls-chart{display:flex;align-items:flex-end;gap:2px;height:18px;margin-top:3px;}
+.ls-chart span{width:4px;background:var(--brand);border-radius:2px;opacity:0.7;}
+.laptop-base{background:#252535;height:10px;border-radius:0 0 4px 4px;width:100%;border:1.5px solid rgba(255,255,255,0.08);border-top:none;display:flex;justify-content:center;align-items:center;}
+.laptop-notch{width:40px;height:4px;background:#1a1a2a;border-radius:2px;}
+.laptop-stand{height:8px;width:50%;margin:0 auto;background:#1e1e2e;border-radius:0 0 4px 4px;}
+.laptop-foot{height:3px;width:65%;margin:0 auto;background:#181828;border-radius:2px;}
+.device-tablet{position:absolute;bottom:20px;right:clamp(-10px,-5vw,5px);width:clamp(90px,14vw,130px);}
+.tablet-body{background:#1a1a2a;border-radius:10px;border:2px solid rgba(255,255,255,0.12);overflow:hidden;aspect-ratio:3/4;padding:5px;display:flex;flex-direction:column;gap:3px;}
+.tab-bar{background:var(--brand);border-radius:3px;padding:3px 5px;display:flex;justify-content:space-between;}
+.tab-bar span{font-size:4px;color:rgba(255,255,255,0.8);}
+.tab-stat{background:rgba(255,255,255,0.05);border-radius:3px;padding:3px 5px;flex:1;}
+.tab-stat .ts-l{font-size:3.5px;color:#666;}
+.tab-stat .ts-v{font-size:7px;font-weight:700;color:#e0e0ff;}
+.tab-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;flex:1;}
+.tab-row{background:rgba(255,255,255,0.03);border-radius:3px;padding:3px 4px;display:flex;justify-content:space-between;align-items:center;}
+.tab-row span{font-size:3.5px;color:#777;}
+.tab-row b{font-size:4.5px;color:#e0e0ff;}
+.tab-rows{display:flex;flex-direction:column;gap:2px;}
+.device-phone{position:absolute;bottom:30px;left:clamp(-10px,-4vw,10px);width:clamp(72px,11vw,100px);}
+.phone-body{background:#0e0e1e;border-radius:16px;border:2px solid rgba(255,255,255,0.15);overflow:hidden;aspect-ratio:9/19;display:flex;flex-direction:column;}
+.phone-notch{width:30px;height:5px;background:#0e0e1e;border-radius:0 0 10px 10px;margin:0 auto;border:1.5px solid rgba(255,255,255,0.1);border-top:none;}
+.phone-header{background:linear-gradient(135deg,var(--brand),var(--brand-light));padding:5px 6px;flex-shrink:0;}
+.ph-app{font-size:5px;font-weight:700;color:white;}
+.ph-date{font-size:3.5px;color:rgba(255,255,255,0.7);}
+.phone-body-inner{flex:1;padding:4px;display:flex;flex-direction:column;gap:3px;}
+.ph-alert{background:#1a1200;border-radius:4px;padding:3px 4px;display:flex;gap:3px;align-items:center;}
+.ph-alert::before{content:'';width:3px;height:3px;background:#fbbf24;border-radius:50%;flex-shrink:0;}
+.ph-alert span{font-size:3.5px;color:#fbbf24;}
+.ph-stats{display:grid;grid-template-columns:1fr 1fr;gap:2px;}
+.phst{background:rgba(255,255,255,0.04);border-radius:4px;padding:3px 4px;}
+.phst .pl{font-size:3px;color:#666;}
+.phst .pv{font-size:7px;font-weight:700;color:#e0e0ff;}
+.phst .pv.g{color:#00e5b4;}
+.phst .pv.y{color:#fbbf24;}
+.ph-bill{display:flex;justify-content:space-between;align-items:center;padding:2px 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.ph-bill:last-child{border:none;}
+.pb-name{font-size:3.5px;color:#ccc;}
+.pb-amt{font-size:4.5px;font-weight:700;color:#e0e0ff;}
+.pb-badge{font-size:3px;padding:1px 4px;border-radius:3px;}
+.pb-badge.paid{background:#0a3d1a;color:#00e5b4;}
+.pb-badge.up{background:#3d2a00;color:#fbbf24;}
+.ph-fab{background:var(--brand);border-radius:5px;padding:4px;text-align:center;font-size:4px;font-weight:700;color:white;margin-top:2px;flex-shrink:0;}
+.ph-nav{display:flex;justify-content:space-around;padding:3px 0;border-top:1px solid rgba(255,255,255,0.06);background:#080812;flex-shrink:0;}
+.ph-ni{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.ph-ni i{font-size:7px;font-style:normal;}
+.ph-ni span{font-size:2.5px;color:#555;}
+.fbadge{
+  position:absolute;background:var(--card);border:1px solid var(--border2);
+  border-radius:12px;padding:8px 12px;
+  display:flex;align-items:center;gap:8px;font-size:12px;
+  white-space:nowrap;backdrop-filter:blur(10px);
+  animation:floaty 3s ease-in-out infinite;
+}
+.fbadge-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.fbadge-icon.green{background:rgba(0,229,180,0.15);}
+.fbadge-icon.purple{background:rgba(91,76,255,0.2);}
+.fb1{top:15%;left:-5%;animation-delay:0s;}
+.fb2{top:10%;right:2%;animation-delay:1.5s;}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+.fb-label{font-size:10px;color:var(--muted);}
+.fb-val{font-size:13px;font-weight:600;color:var(--text);}
+.stats-bar{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:clamp(18px,3vw,28px) clamp(16px,4vw,48px);}
+.stats-inner{max-width:900px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:20px;}
+.stat-item{text-align:center;}
+.stat-num{font-family:'Syne',sans-serif;font-size:clamp(24px,3vw,36px);font-weight:700;background:linear-gradient(120deg,var(--brand-light),var(--accent));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-lbl{font-size:13px;color:var(--muted);margin-top:2px;}
+.section{position:relative;z-index:1;padding:clamp(60px,10vw,100px) clamp(16px,4vw,80px);max-width:1200px;margin:0 auto;}
+.sec-eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--brand-light);font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:14px;}
+.sec-eyebrow::before{content:'';width:20px;height:1.5px;background:var(--brand-light);}
+h2.sec-title{font-family:'Syne',sans-serif;font-size:clamp(28px,3.5vw,48px);font-weight:700;line-height:1.12;letter-spacing:-0.025em;margin-bottom:12px;}
+.sec-sub{font-size:16px;color:var(--muted);max-width:500px;line-height:1.7;}
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:clamp(36px,5vw,56px);}
+.prod-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-xl);overflow:hidden;transition:border-color 0.3s,transform 0.3s;cursor:pointer;}
+.prod-card:hover{border-color:rgba(91,76,255,0.5);transform:translateY(-6px);}
+.prod-card.featured{border-color:rgba(91,76,255,0.3);background:linear-gradient(135deg,rgba(91,76,255,0.1),rgba(0,229,180,0.05));}
+.prod-card-top{padding:clamp(24px,3vw,36px);border-bottom:1px solid var(--border);}
+.prod-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--brand),var(--brand-light));display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:18px;}
+.prod-icon.blum{background:linear-gradient(135deg,#5b4cff,#00e5b4);}
+.prod-badge{display:inline-block;background:rgba(0,229,180,0.15);border:1px solid rgba(0,229,180,0.3);color:var(--accent);font-size:11px;font-weight:500;padding:3px 10px;border-radius:99px;margin-bottom:12px;}
+.prod-badge.soon{background:rgba(255,107,107,0.12);border-color:rgba(255,107,107,0.3);color:var(--accent2);}
+h3.prod-name{font-family:'Syne',sans-serif;font-size:clamp(20px,2vw,26px);font-weight:700;margin-bottom:8px;letter-spacing:-0.02em;}
+.prod-name .brand{color:var(--muted2);}
+.prod-desc{font-size:14px;color:var(--muted);line-height:1.7;max-width:340px;}
+.prod-features{padding:clamp(16px,2.5vw,28px) clamp(24px,3vw,36px);display:flex;flex-direction:column;gap:10px;}
+.feat-item{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--muted);}
+.feat-item::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+.prod-cta{display:block;margin:0 clamp(24px,3vw,36px) clamp(24px,3vw,36px);padding:12px 24px;background:var(--brand);color:white;border-radius:99px;text-align:center;font-size:14px;font-weight:500;text-decoration:none;transition:background 0.2s,transform 0.15s;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.prod-cta:hover{background:var(--brand-light);transform:scale(1.02);}
+.prod-cta.ghost{background:transparent;border:1.5px solid var(--border2);color:var(--text);}
+.prod-cta.ghost:hover{background:rgba(255,255,255,0.05);}
+.feats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:clamp(36px,5vw,56px);}
+.feat-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;transition:border-color 0.2s,transform 0.2s;}
+.feat-card:hover{border-color:rgba(91,76,255,0.35);transform:translateY(-4px);}
+.feat-card-icon{width:42px;height:42px;border-radius:12px;background:rgba(91,76,255,0.15);display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:14px;}
+.feat-card h4{font-family:'Syne',sans-serif;font-size:15px;font-weight:600;margin-bottom:6px;letter-spacing:-0.01em;}
+.feat-card p{font-size:13px;color:var(--muted);line-height:1.6;}
+.phase-wrap{position:relative;z-index:1;padding:0 clamp(16px,4vw,80px) clamp(60px,8vw,80px);}
+.phase-box{max-width:700px;margin:0 auto;background:rgba(91,76,255,0.08);border:1.5px solid rgba(91,76,255,0.25);border-radius:var(--r-xl);padding:clamp(24px,3vw,40px);text-align:center;}
+.phase-box h4{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px;color:var(--text);}
+.phase-box p{font-size:14px;color:var(--muted);line-height:1.7;}
+.price-tag{display:inline-block;margin-top:20px;background:rgba(91,76,255,0.15);border:1px solid rgba(91,76,255,0.3);color:#a89fff;font-size:13px;padding:6px 18px;border-radius:99px;}
+.tools-row{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(28px,4vw,44px);}
+.tool-pill{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--border);border-radius:99px;padding:10px 18px;font-size:13px;font-weight:400;transition:border-color 0.2s,transform 0.15s;cursor:pointer;}
+.tool-pill:hover{border-color:rgba(91,76,255,0.4);transform:translateY(-2px);}
+.tp-icon{font-size:16px;}
+.cta-banner{position:relative;z-index:1;margin:0 clamp(16px,4vw,80px) 80px;background:linear-gradient(120deg,var(--brand),var(--brand-dark));border-radius:var(--r-xl);padding:clamp(36px,5vw,60px) clamp(24px,4vw,60px);text-align:center;overflow:hidden;}
+.cta-banner::before{content:'';position:absolute;width:400px;height:400px;background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 60%);top:-100px;right:-80px;pointer-events:none;}
+.cta-banner h2{font-family:'Syne',sans-serif;font-size:clamp(24px,3.5vw,42px);font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.025em;position:relative;}
+.cta-banner p{font-size:15px;color:rgba(255,255,255,0.75);margin-bottom:28px;position:relative;}
+.btn-cta-white{display:inline-flex;align-items:center;gap:8px;background:white;color:var(--brand);padding:14px 32px;border-radius:99px;font-size:15px;font-weight:600;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:0.2s;text-decoration:none;position:relative;}
+.btn-cta-white:hover{transform:scale(1.04);}
+footer{position:relative;z-index:1;background:var(--surface);border-top:1px solid var(--border);padding:clamp(28px,4vw,40px) clamp(16px,4vw,48px);}
+.footer-inner{max-width:1200px;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:20px;}
+.footer-brand{display:flex;align-items:center;gap:10px;}
+.footer-brand .fn{font-family:'Syne',sans-serif;font-size:17px;font-weight:700;color:var(--text);}
+.footer-brand .fs{font-size:12px;color:var(--muted);margin-top:1px;}
+.footer-links{display:flex;gap:24px;flex-wrap:wrap;}
+.footer-links a{color:var(--muted);font-size:13px;text-decoration:none;transition:color 0.2s;}
+.footer-links a:hover{color:var(--text);}
+.footer-copy{font-size:12px;color:var(--muted2);}
+.modal-overlay{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,0.7);backdrop-filter:blur(8px);justify-content:center;align-items:center;}
+.modal-overlay.open{display:flex;}
+.modal-box{background:var(--card);border:1px solid var(--border2);border-radius:var(--r-xl);padding:clamp(28px,4vw,44px);width:90%;max-width:460px;text-align:center;animation:mPop 0.2s ease;}
+@keyframes mPop{from{transform:scale(0.93);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-icon{font-size:36px;margin-bottom:16px;}
+.modal-box h3{font-family:'Syne',sans-serif;font-size:20px;font-weight:700;margin-bottom:10px;}
+.modal-box p{font-size:14px;color:var(--muted);line-height:1.7;}
+.modal-highlight{margin-top:16px;background:rgba(91,76,255,0.1);border:1px solid rgba(91,76,255,0.25);border-radius:12px;padding:12px 16px;font-size:13px;color:#a89fff;line-height:1.6;}
+.modal-contact{font-size:16px;font-weight:600;color:var(--brand-light);margin-top:8px;}
+.modal-close{display:inline-block;margin-top:20px;background:var(--brand);color:white;padding:10px 24px;border-radius:99px;font-size:14px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background 0.2s;}
+.modal-close:hover{background:var(--brand-light);}
+.sec-divider{height:1px;background:linear-gradient(90deg,transparent,var(--border2),transparent);margin:0 clamp(16px,4vw,80px);}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;text-align:center;}
+  .hero-sub{margin-left:auto;margin-right:auto;}
+  .hero-ctas{justify-content:center;}
+  .trust-pills{justify-content:center;}
+  .hero-right{height:clamp(280px,55vw,360px);}
+  .devices-wrap{height:100%;}
+  .fb1,.fb2{display:none;}
+  .product-grid{grid-template-columns:1fr;}
+}
+@media(max-width:640px){
+  .hamburger{display:flex;}
+  .nav-links{display:none;position:absolute;top:64px;left:0;right:0;background:rgba(8,8,15,0.98);flex-direction:column;padding:20px 24px;gap:20px;border-bottom:1px solid var(--border);}
+  .nav-links.open{display:flex;}
+  .nav-links a{font-size:16px;}
+  .feats-grid{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:420px){
+  .feats-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<div class="ambient amb1"></div>
+<div class="ambient amb2"></div>
+<div class="ambient amb3"></div>
+
+<nav>
+  <a class="nav-logo" href="">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 5L7 13L11 7L15 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <span class="logo-name">Wayze</span>
+  </a>
+  <div class="nav-links" id="navLinks">
+    <a href="#products">Products</a>
+    <a href="#features">Features</a>
+    <a href="tools.html">Free Tools</a>
+    <a href="#" onclick="openModal('contactModal')">Contact</a>
+    <a href="#" class="nav-pill" onclick="openModal('earlyModal')">Get Early Access</a>
+  </div>
+  <div class="hamburger" id="ham" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Starting in India · Going Global</div>
+    <h1 class="hero-title">
+      Run your shop.<br>
+      <span class="grad">Not paperwork.</span>
+    </h1>
+    <p class="hero-sub">
+      Wayze gives you lightning-fast billing, real-time stock alerts, and full payment tracking — built for small businesses everywhere, starting from India.
+    </p>
+    <div class="hero-ctas">
+      <a href="#" class="btn-hero primary" onclick="openModal('earlyModal')">
+        Get Early Access <span class="btn-arrow">→</span>
+      </a>
+      <a href="#products" class="btn-hero ghost">See Products</a>
+    </div>
+    <div class="trust-pills">
+      <div class="tpill"><div class="dot"></div>No signup to start</div>
+      <div class="tpill"><div class="dot"></div>Works offline</div>
+      <div class="tpill"><div class="dot"></div>Free forever plan</div>
+      <div class="tpill"><div class="dot"></div>WhatsApp share</div>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="fbadge fb1">
+      <div class="fbadge-icon green">💰</div>
+      <div><div class="fb-label">Today's Revenue</div><div class="fb-val">₹9,366</div></div>
+    </div>
+    <div class="fbadge fb2">
+      <div class="fbadge-icon purple">📦</div>
+      <div><div class="fb-label">Stock Alert</div><div class="fb-val">3 items low</div></div>
+    </div>
+    <div class="devices-wrap">
+      <div class="device-laptop">
+        <div class="laptop-body">
+          <div class="laptop-screen">
+            <div class="ls-bar">
+              <div class="ls-dots"><i></i><i></i><i></i></div>
+              <span>WayzeBlum Dashboard</span>
+              <span>9:41 AM</span>
+            </div>
+            <div class="ls-grid">
+              <div class="ls-card">
+                <div class="lc-label">Today Sales</div>
+                <div class="lc-val green">₹4,820</div>
+                <div class="ls-chart">
+                  <span style="height:40%"></span><span style="height:60%"></span>
+                  <span style="height:45%"></span><span style="height:80%"></span>
+                  <span style="height:55%"></span><span style="height:100%"></span>
+                </div>
+              </div>
+              <div class="ls-card">
+                <div class="lc-label">Pending</div>
+                <div class="lc-val yellow">₹1,200</div>
+                <div style="font-size:5px;color:#666;margin-top:3px;">3 customers</div>
+              </div>
+              <div class="ls-card">
+                <div class="lc-label">This Month</div>
+                <div class="lc-val">₹52K</div>
+                <div style="font-size:5px;color:#666;margin-top:3px;">284 bills</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="laptop-base"><div class="laptop-notch"></div></div>
+        <div class="laptop-stand"></div>
+        <div class="laptop-foot"></div>
+      </div>
+      <div class="device-tablet">
+        <div class="tablet-body">
+          <div class="tab-bar">
+            <span style="font-weight:700;">WayzeBlum</span>
+            <span>◼◼◼</span>
+          </div>
+          <div class="tab-stats">
+            <div class="tab-stat"><div class="ts-l">Bills Today</div><div class="ts-v">12</div></div>
+            <div class="tab-stat"><div class="ts-l">Products</div><div class="ts-v">148</div></div>
+          </div>
+          <div class="tab-rows">
+            <div class="tab-row"><span>Ravi Kumar</span><b>₹640</b></div>
+            <div class="tab-row"><span>Walk-in</span><b>₹210</b></div>
+            <div class="tab-row"><span>Priya Stores</span><b>₹1,200</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="device-phone">
+        <div class="phone-body">
+          <div class="phone-notch"></div>
+          <div class="phone-header">
+            <div class="ph-app">WAYZE BLUM</div>
+            <div class="ph-date">Sunday, 13 Apr</div>
+          </div>
+          <div class="phone-body-inner">
+            <div class="ph-alert"><span>3 items low stock</span></div>
+            <div class="ph-stats">
+              <div class="phst"><div class="pl">Sales</div><div class="pv g">₹4,820</div></div>
+              <div class="phst"><div class="pl">Pending</div><div class="pv y">₹1,200</div></div>
+            </div>
+            <div class="ph-bill">
+              <span class="pb-name">Ravi Kumar</span>
+              <div style="text-align:right"><div class="pb-amt">₹640</div><span class="pb-badge paid">Paid</span></div>
+            </div>
+            <div class="ph-bill">
+              <span class="pb-name">Priya Stores</span>
+              <div style="text-align:right"><div class="pb-amt">₹1,200</div><span class="pb-badge up">Unpaid</span></div>
+            </div>
+          </div>
+          <div class="ph-fab">+ New Bill</div>
+          <div class="ph-nav">
+            <div class="ph-ni"><i>🏠</i><span>Home</span></div>
+            <div class="ph-ni"><i>📦</i><span>Stock</span></div>
+            <div class="ph-ni"><i>🧾</i><span>Bills</span></div>
+            <div class="ph-ni"><i>📊</i><span>Reports</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item"><div class="stat-num">3 sec</div><div class="stat-lbl">To create a bill</div></div>
+    <div class="stat-item"><div class="stat-num">100%</div><div class="stat-lbl">Free to start</div></div>
+    <div class="stat-item"><div class="stat-num">Multi-Lang</div><div class="stat-lbl">Tamil, English & more</div></div>
+    <div class="stat-item"><div class="stat-num">0 ads</div><div class="stat-lbl">Ever, guaranteed</div></div>
+    <div class="stat-item"><div class="stat-num">Offline</div><div class="stat-lbl">Always works</div></div>
+  </div>
+</div>
+
+<div id="products" class="section">
+  <div class="sec-eyebrow">Our Products</div>
+  <h2 class="sec-title">Built under one brand.<br>Designed for your business.</h2>
+  <p class="sec-sub">Wayze is the brand. Each product is purpose-built for a specific need — starting with billing and inventory, built to scale globally.</p>
+  <div class="product-grid">
+    <div class="prod-card featured">
+      <div class="prod-card-top">
+        <div class="prod-icon blum">🌿</div>
+        <div class="prod-badge">Flagship Product</div>
+        <h3 class="prod-name"><span class="brand">Wayze</span>Blum</h3>
+        <p class="prod-desc">Complete billing & inventory management for retailers worldwide. Starting from India, built to work for any small business anywhere. Create bills in 3 seconds, track stock automatically, and chase payments effortlessly.</p>
+      </div>
+      <div class="prod-features">
+        <div class="feat-item">One-tap billing with auto stock deduction</div>
+        <div class="feat-item">Real-time low stock alerts</div>
+        <div class="feat-item">WhatsApp invoice sharing</div>
+        <div class="feat-item">Unpaid bill tracking & reminders</div>
+        <div class="feat-item">Daily, weekly & monthly sales reports</div>
+        <div class="feat-item">Tamil & English interface</div>
+      </div>
+      <a href="#" class="prod-cta" onclick="openModal('earlyModal')">Get Early Access →</a>
+    </div>
+    <div class="prod-card" onclick="openModal('futureModal')">
+      <div class="prod-card-top">
+        <div class="prod-icon" style="background:linear-gradient(135deg,#2d2d5e,#3d3d7a);">✦</div>
+        <div class="prod-badge soon">Coming Soon</div>
+        <h3 class="prod-name"><span class="brand">Wayze</span> — More to come</h3>
+        <p class="prod-desc">We're building more products under the Wayze brand — each one solving a real pain point for small business owners across the globe. HR, payroll, accounting and more.</p>
+      </div>
+      <div class="prod-features">
+        <div class="feat-item" style="opacity:0.5">Payroll & HR management</div>
+        <div class="feat-item" style="opacity:0.5">GST filing & accounting</div>
+        <div class="feat-item" style="opacity:0.5">Customer loyalty programs</div>
+        <div class="feat-item" style="opacity:0.5">Multi-branch management</div>
+      </div>
+      <button class="prod-cta ghost" onclick="openModal('futureModal')">Stay Updated →</button>
+    </div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<div id="features" class="section">
+  <div class="sec-eyebrow">What's Inside</div>
+  <h2 class="sec-title">Everything you need.<br>Nothing you don't.</h2>
+  <p class="sec-sub">WayzeBlum is packed with features that actually matter to shop owners running their business day-to-day.</p>
+  <div class="feats-grid">
+    <div class="feat-card"><div class="feat-card-icon">⚡</div><h4>Lightning Billing</h4><p>Create a full invoice in under 3 seconds. Add items by scanning or typing — no training needed.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">📦</div><h4>Smart Inventory</h4><p>Stock deducts automatically on every sale. Get instant alerts when items are running low.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">📲</div><h4>WhatsApp Invoice</h4><p>Share a clean PDF invoice to your customer on WhatsApp in one tap. No extra app needed.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">💳</div><h4>Payment Tracking</h4><p>See who owes you money, how much, and since when. Never lose track of unpaid bills again.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">📊</div><h4>Sales Dashboard</h4><p>Daily, weekly and monthly reports at a glance. Understand how your business is growing.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">🌐</div><h4>Multi-Language UI</h4><p>Currently supports Tamil & English. More languages coming as we expand — built to work for businesses everywhere.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">🔒</div><h4>Works Offline</h4><p>No internet? No problem. Bill your customers even when connectivity drops — data syncs when you're back online.</p></div>
+    <div class="feat-card"><div class="feat-card-icon">📱</div><h4>All Devices</h4><p>Phone, tablet, laptop — WayzeBlum works beautifully on every screen size you own.</p></div>
+  </div>
+</div>
+
+<div class="sec-divider"></div>
+
+<div id="tools" class="section">
+  <div class="sec-eyebrow">Free Tools</div>
+  <h2 class="sec-title">Useful calculators.<br>No signup required.</h2>
+  <p class="sec-sub">Free tools for everyday business and personal finance calculations. Works for anyone — even if you don't use WayzeBlum.</p>
+  <div class="tools-row">
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">🏦</span>EMI Calculator</a>
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">💹</span>GST Calculator</a>
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">📈</span>SIP Planner</a>
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">💰</span>Profit Margin</a>
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">📋</span>Invoice Builder</a>
+    <a href="tools.html" class="tool-pill"><span class="tp-icon">📉</span>Discount Calculator</a>
+  </div>
+</div>
+
+<div class="phase-wrap">
+  <div class="phase-box">
+    <h4>Transparent about pricing. Always.</h4>
+    <p>WayzeBlum is 100% free today. When advanced features launch, the core billing features will always stay free. If paid plans are introduced, you'll get 30 days notice — and they'll start at ₹699/month.</p>
+    <div class="price-tag">Free now · Paid plans from ₹699/mo in future</div>
+  </div>
+</div>
+
+<div class="cta-banner">
+  <h2>Join the movement. Starting in India, going global.</h2>
+  <p>Be among the first business owners on Wayze — get early access to WayzeBlum and shape the product from day one.</p>
+  <a href="#" class="btn-cta-white" onclick="openModal('earlyModal')">Get Early Access →</a>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-mark" style="width:30px;height:30px;border-radius:8px;">
+        <svg width="14" height="14" viewBox="0 0 18 18" fill="none">
+          <path d="M3 5L7 13L11 7L15 13" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div>
+        <div class="fn">Wayze</div>
+        <div class="fs">Starting in India · Going global</div>
+      </div>
+    </div>
+    <div class="footer-links">
+      <a href="#products">Products</a>
+      <a href="#features">Features</a>
+      <a href="tools.html">Free Tools</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="#" onclick="openModal('contactModal')">Contact</a>
+      <a href="#" onclick="openModal('aboutModal')">About</a>
+    </div>
+    <div class="footer-copy">© 2026 Wayze. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- MODALS -->
+<div id="earlyModal" class="modal-overlay" onclick="overlayClose(event,'earlyModal')">
+  <div class="modal-box">
+    <div class="modal-icon">🚀</div>
+    <h3>Get Early Access to WayzeBlum</h3>
+    <p>WayzeBlum is under active development. Be among the first users and unlock extended free access when we launch.</p>
+    <div class="modal-highlight">
+      ✉️ Drop us an email at <strong>support@wayze.co.in</strong> with your shop name and we'll add you to the early access list.
+    </div>
+    <button class="modal-close" onclick="closeModal('earlyModal');openModal('contactModal');">Email Us →</button>
+  </div>
+</div>
+
+<div id="contactModal" class="modal-overlay" onclick="overlayClose(event,'contactModal')">
+  <div class="modal-box">
+    <div class="modal-icon">📧</div>
+    <h3>Get in Touch</h3>
+    <div class="modal-contact">support@wayze.co.in</div>
+    <p style="margin-top:10px;">We usually reply within 24–48 hours. Questions, feedback, or early access — we'd love to hear from you.</p>
+    <button class="modal-close" onclick="closeModal('contactModal')">Close</button>
+  </div>
+</div>
+
+<div id="aboutModal" class="modal-overlay" onclick="overlayClose(event,'aboutModal')">
+  <div class="modal-box">
+    <div class="modal-icon">🌿</div>
+    <h3>About Wayze</h3>
+    <p style="text-align:left;">Wayze started as a tool for small business owners in India — the millions of shop owners still running their businesses on notebooks and calculators.<br><br>We believe powerful business tools shouldn't cost a fortune or require technical skills. WayzeBlum is our first product — billing and inventory management, simple and fast.<br><br>But India is just the beginning. We're building Wayze to serve small businesses everywhere in the world.</p>
+    <div class="modal-highlight">💡 Vision: Every small business — anywhere in the world — runs smoother with Wayze.</div>
+    <button class="modal-close" onclick="closeModal('aboutModal')">Close</button>
+  </div>
+</div>
+
+<div id="futureModal" class="modal-overlay" onclick="overlayClose(event,'futureModal')">
+  <div class="modal-box">
+    <div class="modal-icon">✦</div>
+    <h3>More Wayze Products</h3>
+    <p>We're building more products under the Wayze brand. Each one will solve a real problem for small business owners — starting in India, expanding globally. HR, payroll, accounting and more.</p>
+    <div class="modal-highlight">📬 Email <strong>support@wayze.co.in</strong> to get notified when new products launch.</div>
+    <button class="modal-close" onclick="closeModal('futureModal')">Got it</button>
+  </div>
+</div>
+
+<script>
+function openModal(id){
+  // 👉 Google Analytics tracking
+  gtag('event', 'stay_updated_click', {
+    event_category: 'engagement',
+    event_label: id
+  });
+document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+function overlayClose(e,id){if(e.target.id===id)closeModal(id);}
+function toggleMenu(){document.getElementById('navLinks').classList.toggle('open');}
+document.querySelectorAll('#navLinks a').forEach(a=>{
+  a.addEventListener('click',()=>document.getElementById('navLinks').classList.remove('open'));
+});
+</script>
+</body>
+</html>
